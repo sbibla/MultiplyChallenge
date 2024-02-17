@@ -8,17 +8,43 @@
 
 /* Begin PBXBuildFile section */
 		647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */; };
-		647996992B7EEA0500B38283 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996982B7EEA0500B38283 /* ContentView.swift */; };
+		647996992B7EEA0500B38283 /* InitScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996982B7EEA0500B38283 /* InitScreen.swift */; };
 		6479969B2B7EEA0600B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6479969A2B7EEA0600B38283 /* Assets.xcassets */; };
 		6479969E2B7EEA0600B38283 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6479969D2B7EEA0600B38283 /* Preview Assets.xcassets */; };
+		647996A52B7EFE6F00B38283 /* GameFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996A42B7EFE6F00B38283 /* GameFile.swift */; };
+		647996A72B7EFEDE00B38283 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996A62B7EFEDE00B38283 /* ImagePicker.swift */; };
+		647996A92B7EFF3E00B38283 /* MathQuestionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996A82B7EFF3E00B38283 /* MathQuestionBuilder.swift */; };
+		647996B42B802F7300B38283 /* DefaultImage5.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 647996AA2B802F7200B38283 /* DefaultImage5.jpeg */; };
+		647996B52B802F7300B38283 /* DefaultImage7.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 647996AB2B802F7300B38283 /* DefaultImage7.jpeg */; };
+		647996B62B802F7300B38283 /* DefaultImage2.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996AC2B802F7300B38283 /* DefaultImage2.heic */; };
+		647996B72B802F7300B38283 /* DefaultImage3.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996AD2B802F7300B38283 /* DefaultImage3.heic */; };
+		647996B82B802F7300B38283 /* DefaultImage10.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 647996AE2B802F7300B38283 /* DefaultImage10.jpeg */; };
+		647996B92B802F7300B38283 /* DefaultImage1.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996AF2B802F7300B38283 /* DefaultImage1.heic */; };
+		647996BA2B802F7300B38283 /* DefaultImage6.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996B02B802F7300B38283 /* DefaultImage6.heic */; };
+		647996BB2B802F7300B38283 /* DefaultImage4.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996B12B802F7300B38283 /* DefaultImage4.heic */; };
+		647996BC2B802F7300B38283 /* DefaultImage8.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996B22B802F7300B38283 /* DefaultImage8.heic */; };
+		647996BD2B802F7300B38283 /* DefaultImage9.heic in Resources */ = {isa = PBXBuildFile; fileRef = 647996B32B802F7300B38283 /* DefaultImage9.heic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		647996932B7EEA0500B38283 /* MultiplyChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiplyChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyChallengeApp.swift; sourceTree = "<group>"; };
-		647996982B7EEA0500B38283 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		647996982B7EEA0500B38283 /* InitScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitScreen.swift; sourceTree = "<group>"; };
 		6479969A2B7EEA0600B38283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6479969D2B7EEA0600B38283 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		647996A42B7EFE6F00B38283 /* GameFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameFile.swift; sourceTree = "<group>"; };
+		647996A62B7EFEDE00B38283 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		647996A82B7EFF3E00B38283 /* MathQuestionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathQuestionBuilder.swift; sourceTree = "<group>"; };
+		647996AA2B802F7200B38283 /* DefaultImage5.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DefaultImage5.jpeg; sourceTree = "<group>"; };
+		647996AB2B802F7300B38283 /* DefaultImage7.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DefaultImage7.jpeg; sourceTree = "<group>"; };
+		647996AC2B802F7300B38283 /* DefaultImage2.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage2.heic; sourceTree = "<group>"; };
+		647996AD2B802F7300B38283 /* DefaultImage3.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage3.heic; sourceTree = "<group>"; };
+		647996AE2B802F7300B38283 /* DefaultImage10.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DefaultImage10.jpeg; sourceTree = "<group>"; };
+		647996AF2B802F7300B38283 /* DefaultImage1.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage1.heic; sourceTree = "<group>"; };
+		647996B02B802F7300B38283 /* DefaultImage6.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage6.heic; sourceTree = "<group>"; };
+		647996B12B802F7300B38283 /* DefaultImage4.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage4.heic; sourceTree = "<group>"; };
+		647996B22B802F7300B38283 /* DefaultImage8.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage8.heic; sourceTree = "<group>"; };
+		647996B32B802F7300B38283 /* DefaultImage9.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = DefaultImage9.heic; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +61,7 @@
 		6479968A2B7EEA0500B38283 = {
 			isa = PBXGroup;
 			children = (
+				647996A62B7EFEDE00B38283 /* ImagePicker.swift */,
 				647996952B7EEA0500B38283 /* MultiplyChallenge */,
 				647996942B7EEA0500B38283 /* Products */,
 			);
@@ -51,9 +78,21 @@
 		647996952B7EEA0500B38283 /* MultiplyChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				647996A82B7EFF3E00B38283 /* MathQuestionBuilder.swift */,
+				647996A42B7EFE6F00B38283 /* GameFile.swift */,
 				647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */,
-				647996982B7EEA0500B38283 /* ContentView.swift */,
+				647996982B7EEA0500B38283 /* InitScreen.swift */,
 				6479969A2B7EEA0600B38283 /* Assets.xcassets */,
+				647996AF2B802F7300B38283 /* DefaultImage1.heic */,
+				647996AC2B802F7300B38283 /* DefaultImage2.heic */,
+				647996AD2B802F7300B38283 /* DefaultImage3.heic */,
+				647996B12B802F7300B38283 /* DefaultImage4.heic */,
+				647996AA2B802F7200B38283 /* DefaultImage5.jpeg */,
+				647996B02B802F7300B38283 /* DefaultImage6.heic */,
+				647996AB2B802F7300B38283 /* DefaultImage7.jpeg */,
+				647996B22B802F7300B38283 /* DefaultImage8.heic */,
+				647996B32B802F7300B38283 /* DefaultImage9.heic */,
+				647996AE2B802F7300B38283 /* DefaultImage10.jpeg */,
 				6479969C2B7EEA0600B38283 /* Preview Content */,
 			);
 			path = MultiplyChallenge;
@@ -125,7 +164,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				647996BD2B802F7300B38283 /* DefaultImage9.heic in Resources */,
+				647996B72B802F7300B38283 /* DefaultImage3.heic in Resources */,
+				647996B52B802F7300B38283 /* DefaultImage7.jpeg in Resources */,
+				647996B42B802F7300B38283 /* DefaultImage5.jpeg in Resources */,
+				647996BA2B802F7300B38283 /* DefaultImage6.heic in Resources */,
+				647996BB2B802F7300B38283 /* DefaultImage4.heic in Resources */,
+				647996B92B802F7300B38283 /* DefaultImage1.heic in Resources */,
+				647996BC2B802F7300B38283 /* DefaultImage8.heic in Resources */,
+				647996B82B802F7300B38283 /* DefaultImage10.jpeg in Resources */,
 				6479969E2B7EEA0600B38283 /* Preview Assets.xcassets in Resources */,
+				647996B62B802F7300B38283 /* DefaultImage2.heic in Resources */,
 				6479969B2B7EEA0600B38283 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,8 +186,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				647996992B7EEA0500B38283 /* ContentView.swift in Sources */,
+				647996992B7EEA0500B38283 /* InitScreen.swift in Sources */,
+				647996A72B7EFEDE00B38283 /* ImagePicker.swift in Sources */,
+				647996A52B7EFE6F00B38283 /* GameFile.swift in Sources */,
 				647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */,
+				647996A92B7EFF3E00B38283 /* MathQuestionBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

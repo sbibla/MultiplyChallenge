@@ -139,9 +139,9 @@ struct GameFile: View {
                 showAnswerButtons, alignment: .bottom)
             .navigationBarHidden(true)
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
-            .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil, content: {
-                ImagePicker(image: $puzzlePickedImage)
-            })
+//            .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil, content: {
+//                ImagePicker(image: $puzzlePickedImage)
+//            })
 //            Image(levelComplete&&(!displayStartGameButton) ? "EngFlowChart" : "").aspectRatio(contentMode: .fit)
         }
     }
@@ -202,25 +202,18 @@ struct GameFile: View {
     }
     private var startGameButton: some View {
         
-        VStack {
-            Button {
-                startGame()
-    //            dismiss()
-            }label: {
-                Text("Start game 🕺🏻")
-                    .font(.system(size: 122, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity,maxHeight: .infinity)
-                    .background(.black)
-        }
-            Button {
-                shouldShowImagePicker.toggle()
-            }label: {
-                Text("Choose Pictures")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundColor(.white)
-//                    .frame(maxWidth: .infinity,maxHeight: .infinity)
-                    .background(.black)
+        HStack(spacing: 16) {
+            VStack {
+                Button {
+                    startGame()
+                    //            dismiss()
+                }label: {
+                    Text("Start game 🕺🏻")
+                        .font(.system(size: 122, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity,maxHeight: .infinity)
+                        .background(.black)
+                }
                 
             }
         }
@@ -238,7 +231,7 @@ struct GameFile: View {
                 //            if currentEquation == "Press to Start!" {
                 //                startGame()
                 //            }
-                shouldShowImagePicker.toggle()
+//                shouldShowImagePicker.toggle()
             } label: {
                 HStack {
                     Spacer()
