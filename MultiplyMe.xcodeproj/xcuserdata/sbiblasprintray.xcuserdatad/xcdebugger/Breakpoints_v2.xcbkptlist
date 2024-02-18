@@ -14,8 +14,8 @@
             filePath = "MultiplyChallenge/GameFile.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
             landmarkName = "delayLevel()"
             landmarkType = "7">
          </BreakpointContent>

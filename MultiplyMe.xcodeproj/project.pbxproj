@@ -31,7 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		647996932B7EEA0500B38283 /* MultiplyChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiplyChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		647996932B7EEA0500B38283 /* MultiplyMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiplyMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyChallengeApp.swift; sourceTree = "<group>"; };
 		647996982B7EEA0500B38283 /* InitScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitScreen.swift; sourceTree = "<group>"; };
 		6479969A2B7EEA0600B38283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 		647996942B7EEA0500B38283 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				647996932B7EEA0500B38283 /* MultiplyChallenge.app */,
+				647996932B7EEA0500B38283 /* MultiplyMe.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,9 +129,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		647996922B7EEA0500B38283 /* MultiplyChallenge */ = {
+		647996922B7EEA0500B38283 /* MultiplyMe */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 647996A12B7EEA0600B38283 /* Build configuration list for PBXNativeTarget "MultiplyChallenge" */;
+			buildConfigurationList = 647996A12B7EEA0600B38283 /* Build configuration list for PBXNativeTarget "MultiplyMe" */;
 			buildPhases = (
 				6479968F2B7EEA0500B38283 /* Sources */,
 				647996902B7EEA0500B38283 /* Frameworks */,
@@ -141,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = MultiplyChallenge;
+			name = MultiplyMe;
 			productName = MultiplyChallenge;
-			productReference = 647996932B7EEA0500B38283 /* MultiplyChallenge.app */;
+			productReference = 647996932B7EEA0500B38283 /* MultiplyMe.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -161,7 +161,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyChallenge" */;
+			buildConfigurationList = 6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyMe" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -174,7 +174,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				647996922B7EEA0500B38283 /* MultiplyChallenge */,
+				647996922B7EEA0500B38283 /* MultiplyMe */,
 			);
 		};
 /* End PBXProject section */
@@ -354,8 +354,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -384,8 +384,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -403,7 +403,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyChallenge" */ = {
+		6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyMe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6479969F2B7EEA0600B38283 /* Debug */,
@@ -412,7 +412,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		647996A12B7EEA0600B38283 /* Build configuration list for PBXNativeTarget "MultiplyChallenge" */ = {
+		647996A12B7EEA0600B38283 /* Build configuration list for PBXNativeTarget "MultiplyMe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				647996A22B7EEA0600B38283 /* Debug */,

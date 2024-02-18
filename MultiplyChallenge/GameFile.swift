@@ -252,21 +252,6 @@ struct GameFile: View {
         }
     }
                    
-    struct showImageWithDelay: View {
-        @State private var hasTimeElapsed = false
-
-        var body: some View {
-            Text(hasTimeElapsed ? "Sorry, too late." : "Please enter above.")
-                .task(delayText)
-        }
-
-        private func delayText() async {
-            // Delay of 7.5 seconds (1 second = 1_000_000_000 nanoseconds)
-            try? await Task.sleep(nanoseconds: 7_500_000_000)
-            hasTimeElapsed = true
-        }
-    }
-    
     private func delayLevel() async {
         // Delay of 7.5 seconds (1 second = 1_000_000_000 nanoseconds)
         try? await Task.sleep(nanoseconds: 7_500_000_000)
