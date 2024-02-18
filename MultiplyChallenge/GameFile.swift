@@ -14,7 +14,12 @@ import AVFoundation
 
 
 
+
 struct GameFile: View {
+    @State var audioPlayer: AVAudioPlayer!
+    @State var sound = false
+
+    @State var localBackgroundImage: [UIImage?] = [UIImage(named: "DefaultImage1.heic"), UIImage(named: "DefaultImage2.heic"), UIImage(named: "DefaultImage3.heic"), UIImage(named: "DefaultImage4.heic"), UIImage(named: "DefaultImage5.jpeg"), UIImage(named: "DefaultImage6.heic"), UIImage(named: "DefaultImage7.jpeg"), UIImage(named: "DefaultImage8.heic"), UIImage(named: "DefaultImage9.heic"), UIImage(named: "DefaultImage10.jpeg")]
     @State private var showImage = [false, false, false, false,
                                     false, false, false, false,
                                     false, false, false, false,
@@ -39,8 +44,11 @@ struct GameFile: View {
     @State private var dbStatusMessage = ""
     @State var mistakesInLevel = 0
     @State private var puzzlePickedImage: UIImage?
-    @State var backgroundImageDictionary: [Int: UIImage] = [:]
+    @State var gameBackgroundImagesDictionary: [Int: UIImage] = [:]
     @State var shouldShowImagePicker = false
+    @State var currentLevel = 1
+    @State var disalbeAnswerButtonsUntilNextQuestion = false
+    @State private var hasTimeElapsed = false
 
 
 //    @State private var pressed = false
@@ -91,17 +99,17 @@ struct GameFile: View {
             }
         }
     }
-    
+    let encouragementTextArray = ["👋🏼 כל הכבוד 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇"]
 //    @EnvironmentObject var userData: UserData
     var body: some View {
         ZStack {
-            
-//            Image(uiImage: puzzlePickedImage ?? UIImage(imageLiteralResourceName: "SightPink"))
-            Image(systemName: "gear")
-//                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            Image(uiImage: localBackgroundImage[currentLevel-1]!)
+                .resizable()
+                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .aspectRatio(contentMode: .fit)
+                .aspectRatio(contentMode: .fit)
+                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+
             VStack(spacing: 1) {
                 //            Spacer()
                 ForEach(0..<4) {row in
@@ -152,6 +160,20 @@ struct GameFile: View {
 //        }
 //    }
 //
+    func playSounds(_ soundFileName : String) {
+        if sound == false {             // Have a toggle to mute sound in app
+            guard let soundURL = Bundle.main.url(forResource: soundFileName, withExtension: nil) else {
+                fatalError("Unable to find \(soundFileName) in bundle")
+            }
+
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            } catch {
+                print(error.localizedDescription)
+            }
+            audioPlayer.play()
+        }
+    }
     private func buildLevel(level: Int) {
         var resultOne, resultTwo, resultThree, resultLocation: Int
         var equation = ""
@@ -168,12 +190,24 @@ struct GameFile: View {
             }
         }
         print("Dictionary built with size \(pmathDictionary.count)")
+        initLevelButtons()
+
+        for img in gameBackgroundImagesDictionary {
+            localBackgroundImage.append(img.value)
+        }
+        print("Filled background images with size of \(localBackgroundImage.count)")
+        
     }
-    
+    private func initLevelButtons() {
+        for count in 0...15 {
+            disableButton[count] = false
+            showImage[count] = false
+        }
+    }
     private func startGame(){
         displayStartGameButton = false
         levelComplete.toggle()
-        buildLevel(level: 1)
+        buildLevel(level: currentLevel)
         populateQuestions()
         for eq in pmathDictionary {
             print("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)")
@@ -198,7 +232,7 @@ struct GameFile: View {
         currentEquationAnswers[0] = String(pmathDictionary[currentEquation]?.0 ?? -1)
         currentEquationAnswers[1] = String(pmathDictionary[currentEquation]?.1 ?? -1)
         currentEquationAnswers[2] = String(pmathDictionary[currentEquation]?.2 ?? -1)
-        
+        disalbeAnswerButtonsUntilNextQuestion = false
     }
     private var startGameButton: some View {
         
@@ -214,28 +248,38 @@ struct GameFile: View {
                         .frame(maxWidth: .infinity,maxHeight: .infinity)
                         .background(.black)
                 }
-                
             }
         }
     }
-                          
-                          
-                          
-                          
-                          
-                          
+                   
+    struct showImageWithDelay: View {
+        @State private var hasTimeElapsed = false
+
+        var body: some View {
+            Text(hasTimeElapsed ? "Sorry, too late." : "Please enter above.")
+                .task(delayText)
+        }
+
+        private func delayText() async {
+            // Delay of 7.5 seconds (1 second = 1_000_000_000 nanoseconds)
+            try? await Task.sleep(nanoseconds: 7_500_000_000)
+            hasTimeElapsed = true
+        }
+    }
+    
+    private func delayLevel() async {
+        // Delay of 7.5 seconds (1 second = 1_000_000_000 nanoseconds)
+        try? await Task.sleep(nanoseconds: 7_500_000_000)
+//        hasTimeElapsed = true
+        buildLevel(level: currentLevel)
+    }
     private var showAnswerButtons: some View {
         VStack {
             Button {
-//                            shouldShowNewMessageScreen.toggle()
-                //            if currentEquation == "Press to Start!" {
-                //                startGame()
-                //            }
-//                shouldShowImagePicker.toggle()
             } label: {
                 HStack {
                     Spacer()
-                    Text(currentEquation)
+                    Text(disalbeAnswerButtonsUntilNextQuestion ? encouragementTextArray[Int.random(in:0 ... encouragementTextArray.count-1)] : currentEquation)
                         .font(.system(size: 26, weight: .bold))
                     Spacer()
                 }
@@ -264,7 +308,7 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }
+                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
                 Button {
                     checkAnswer(userAnswered: 1)
                 } label: {
@@ -281,7 +325,7 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }
+                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
                 Button {
                     checkAnswer(userAnswered: 2)
                 } label: {
@@ -298,7 +342,7 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }
+                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
             }
         }
 }
@@ -310,21 +354,37 @@ struct GameFile: View {
         }
     }
     private func wrongAnswer() {
-        AudioServicesPlaySystemSound(SystemSoundID(1104))
+//        AudioServicesPlaySystemSound(SystemSoundID(1000))
         mistakesInLevel += 1
+        playSounds("WrongAnswer.aiff")
+
     }
     private func correctAnswer() {
         print("Answered correctly")
+        playSounds("CorrectAnswer.wav")
         showImage[currentButton].toggle()
         disableButton[currentButton].toggle()
+        disalbeAnswerButtonsUntilNextQuestion.toggle()
         #warning("Disable answer button until another question is being pressed")
         
         //All answers are correct
         if disableButton.allSatisfy({$0}) {
             levelComplete.toggle()
             print("Level completed with \(mistakesInLevel) mistakes")
-            announceLevelWinner()
+            if mistakesInLevel < 5 {
+                print("Advancing to next level")
+                playSounds("NextLevel.aiff")
+                currentLevel += 1
+            }else {
+                print("Too many mistakes, repeat level")
+                playSounds("RepeatLevel.aiff")
+            }
+//            announceLevelWinner()
 //            writeLevelFinishTime()
+//            task {
+//                await delayLevel()
+//            }
+            startGame()
         }
         
         
@@ -334,7 +394,13 @@ struct GameFile: View {
     }
     
     private func loadUserImagesFromStorage() {
-        
+//        let testImage: UIImage
+//        List {
+//            ForEach(Array(dict.keys), id: \.self) { key in
+//                Section(header: Text(key)) {
+//                    Text(dict[key] ?? "")
+//                }
+//            }
     }
     
     private func writeLevelFinishTime(){

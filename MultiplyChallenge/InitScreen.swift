@@ -33,8 +33,8 @@ struct InitScreen: View {
                     defaultImageDictionary()
                     startGame.toggle()
                 }label: {
-                    Text("Start game 🕺🏻")
-                        .font(.system(size: 122, weight: .bold))
+                    Text("Start game 🕺🏻, this screen will be used in the future to login and choose images")
+                        .font(.system(size: 22, weight: .bold))
 //                    Text("Start Game")
 //                        .font(.system(size: 20, weight: .bold))
                         .foregroundColor(Color(UIColor.systemBlue))
@@ -43,7 +43,7 @@ struct InitScreen: View {
                 }
             }
             .padding()
-        .fullScreenCover(isPresented: $startGame, content: {GameFile()})
+        .fullScreenCover(isPresented: $startGame, content: {GameFile(gameBackgroundImagesDictionary: backgroundImageDictionary)})
         }
     }
     func defaultImageDictionary(){
@@ -59,7 +59,7 @@ struct InitScreen: View {
         print("loaded \(backgroundImageDictionary.count) images")
     }
     func userPickImages(){
-        
+        print("Present Image picker for user to pick images")
     }
 }
 
