@@ -381,10 +381,8 @@ struct GameFile: View {
             }
 //            announceLevelWinner()
 //            writeLevelFinishTime()
-//            task {
-//                await delayLevel()
-//            }
-            startGame()
+
+            DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {startGame()})
         }
         
         
