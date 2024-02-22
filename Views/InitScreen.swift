@@ -15,83 +15,128 @@ struct InitScreen: View {
     @State var backgroundImages: [UIImage] = [UIImage(named: "DefaultImage1.jpg")!, UIImage(named: "DefaultImage2.jpg")!, UIImage(named: "DefaultImage3.jpg")!, UIImage(named: "DefaultImage4.jpg")!, UIImage(named: "DefaultImage5.jpg")!, UIImage(named: "DefaultImage6.jpg")!, UIImage(named: "DefaultImage7.jpg")!, UIImage(named: "DefaultImage8.jpg")!, UIImage(named: "DefaultImage10.jpg")!,UIImage(named: "DefaultImage9.jpg")!, UIImage(named: "DefaultImage10.jpg")!, UIImage(named: "DefaultImage11.jpg")!, UIImage(named: "DefaultImage12.jpg")!, UIImage(named: "DefaultImage13.jpg")!]
     @State var emailAddress = ""
     @State var password = ""
-    @State var withLoginOption = false
+    @State var withLoginOption = true
     @State var userHasPickedImages = false
+    let gradient = LinearGradient(colors: [.red, .green],
+                                  startPoint: .topLeading,
+                                  endPoint: .bottomTrailing)
     
     var body: some View {
-        VStack {
-            HeaderView()
-//                .onAppear(perform: {
-//                _ = fillBackgroundImages()
-//            })
-            PhotosPicker("Choose 📷", selection: $photosPickerItems,maxSelectionCount: 10, selectionBehavior: .ordered, matching: .images)
-                .foregroundColor(.black)
-            Form {
-                TextField("Email Address", text: $emailAddress)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                SecureField("Password;", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+        ZStack {
+            VStack {
+    //            }
+//            VStack {
                 
+                HeaderView()
+                
+//                PhotosPicker("Choose Images", selection: $photosPickerItems,maxSelectionCount: 10, selectionBehavior: .ordered, matching: .images)
+                //                .foregroundColor(.black)
+                LoginView(emailAddress: emailAddress, password: password)
+                    .opacity(withLoginOption ? 1 : 0)
+                Spacer()
                 Button {
-                    //Attempt login
+                    print("Starting game for user \(emailAddress)")
+                    startGame.toggle()
                 } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.pink)
-                        Text("Log In")
-                            .bold()
-                            .foregroundColor(.white)
-                    }
-                }
-            }.opacity(withLoginOption ? 1 : 0)
-            
-            Button {
-                startGame.toggle()
-            }label: {
-                Text("Start game 🕺🏻, this screen will be used in the future to login and choose images")
-                    .font(.system(size: 22, weight: .bold))
-                //                    Text("Start Game")
-                //                        .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(Color(UIColor.systemBlue))
-                    .frame(maxWidth: .infinity,maxHeight: .infinity)
-                    .background(Color(UIColor.white))
-            }
-            .padding()
-            .fullScreenCover(isPresented: $startGame, content: {
-                GameFile(localBackgroundImage: backgroundImages)
-//                GameFile(localBackgroundImage: userHasPickedImages ? backgroundImages : fillBackgroundImages())
-            })
-            .onChange(of: photosPickerItems) { _, _ in
-                Task {
-                    backgroundImages.removeAll()
-                    for item in photosPickerItems {
-                        if let data = try? await item.loadTransferable(type: Data.self){
-                            if let image = UIImage(data: data){
-                                backgroundImages.append(image)
-                            }
+                    Text("Start Game")
+                        .padding()
+                        .background {
+                            Capsule()
+                                .stroke(gradient, lineWidth: 1.5)
+                                .saturation(1.8)
                         }
-                    }
-                    photosPickerItems.removeAll()
-                    userHasPickedImages = true
-                    print("User picked \(backgroundImages.count) Images")
-                    var startPoint = backgroundImages.count+1
-                    while backgroundImages.count < 13 {
-                        backgroundImages.append(UIImage(named: "DefaultImage\(startPoint).jpg")!)
-                        startPoint+=1
+                        .bold()
+                }
+                Button {
+                    print("empty button for now")
+                }label: {
+                    Text("🕺🏻New here? \n Create An Account")
+                        .font(.system(size: 15))
+                        .foregroundColor(Color(UIColor.systemBlue))
+                }
+                .padding()
+                .fullScreenCover(isPresented: $startGame, content: {
+                    GameFile(localBackgroundImage: backgroundImages)
+                })
+                .onChange(of: photosPickerItems) { _, _ in
+                    Task {
+                        await copyImagesToArray()
+                        //                    saveImagesToLocalStorage()
                     }
                 }
-            }
-        }.background(Color(UIColor.white))
+            }//.background(Color(UIColor.black)) //VStack
+        }
     }
-
-//    func fillBackgroundImages(){
-//        print("User picked \(backgroundImages.count) Images, adding \(10-(backgroundImages.count))")
-//        while backgroundImages.count < 10 {
-//            backgroundImages.append(UIImage(named: "DefaultImage1.jpg")!)
-//        }
-//        print("size was under 10, new size \(backgroundImages.count)")
-////        return backgroundImages
-//    }
+    func copyImagesToArray() async  {
+        backgroundImages.removeAll()
+        for item in photosPickerItems {
+            if let data = try? await item.loadTransferable(type: Data.self){
+                if let image = UIImage(data: data){
+                    backgroundImages.append(image)
+                }
+            }
+        }
+        photosPickerItems.removeAll()
+        userHasPickedImages = true
+        if backgroundImages.count == 0 {
+            print("Called for 2nd time, exiting")
+            return
+        }
+        print("User picked \(backgroundImages.count) Images")
+        var startPoint = backgroundImages.count+1
+        while backgroundImages.count < 13 {
+            backgroundImages.append(UIImage(named: "DefaultImage\(startPoint).jpg")!)
+            startPoint+=1
+        }
+        saveImagesToLocalStorage()
+        #warning("Saving files twice (2nd time is after photosPicketItems.removeAll()")
+    }
+    
+    @State private var storedImage: UIImage?
+    
+    func saveImagesToLocalStorage(){
+        if backgroundImages.count > 0 {
+            storedImage = backgroundImages[0]
+        } else {
+            print("No images to store")
+            return
+        }
+        //convert backgroundImages to Data
+        let dir_path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("userBackgroundImages", isDirectory: true)
+        
+        if !FileManager.default.fileExists(atPath: dir_path.path) {
+            do {
+                try FileManager.default.createDirectory(atPath: dir_path.path, withIntermediateDirectories: true, attributes: nil)
+#if DEBUG
+                print("⚙️ Created Directory: \(dir_path.absoluteString)")
+#endif
+            }
+            catch{
+                print("Error creating user directory \(error.localizedDescription)")
+            }
+        }
+        
+        var startPoint = 1
+        var name = "UserImage\(startPoint).jpg"
+        for userImage in backgroundImages {
+            let img_dir = dir_path.appendingPathComponent(name)
+#if DEBUG
+            print("⚙️ saving file to path: \(img_dir.absoluteString)")
+#endif
+            do {
+                try userImage.jpegData(compressionQuality: 50)?.write(to: img_dir)
+                #if DEBUG
+                print("Image saved to: \(img_dir.absoluteString)")
+                #endif
+            }
+            catch {
+                print("Failed to save image err:"+error.localizedDescription)
+            }
+            startPoint+=1
+            name = "UserImage\(startPoint).jpg"
+        }
+    }
 }
 
 

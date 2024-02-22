@@ -16,10 +16,22 @@ import AVFoundation
 
 
 struct GameFile: View {
+    @State var localBackgroundImage: [UIImage?]
+//    init(img: [UIImage]) {
+//        for myImg in img {
+//            self.localBackgroundImage.append(myImg)
+//        }
+//        startGame()
+//    }
+    init(localBackgroundImage: [UIImage?] = [nil]){
+        _localBackgroundImage = State(initialValue: localBackgroundImage)
+        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
+    }
+    
     @State var audioPlayer: AVAudioPlayer!
     @State var sound = false
 
-    @State var localBackgroundImage: [UIImage?] = []
+    
     @State private var showImage = [false, false, false, false,
                                     false, false, false, false,
                                     false, false, false, false,
@@ -50,101 +62,33 @@ struct GameFile: View {
     @State private var hasTimeElapsed = false
     @State private var testMode = false
     @State var advanceToNextLevel = false
-
-//    init(_ localBackgroundImage: [UIImage]) {
-//        print("number of images \(localBackgroundImage.count)")
-//        for i in (0...localBackgroundImage.count-1) {
-//            self.localBackgroundImage.append(localBackgroundImage[i])
-//        }
-//        print("Inserted \(self.localBackgroundImage.count) Images")
-//    }
+    @State private var allTilesDisabled = false
+    @Environment(\.presentationMode) var presentationMode
 
 
-    struct MyButtonStyle: PrimitiveButtonStyle {
-        var color: Color
-        var col, row: Int
 
-        func makeBody(configuration: PrimitiveButtonStyle.Configuration) -> some View {
-            MyButton(configuration: configuration, color: color, col: col, row: row)
-        }
-
-        struct MyButton: View {
-            @State private var pressed = false
-            let configuration: PrimitiveButtonStyle.Configuration
-            let color: Color
-            let col: Int
-            let row: Int
-
-            var body: some View {
-
-                return configuration.label
-                    .foregroundColor(.white)
-    //                .padding(15)
-                    .background(RoundedRectangle(cornerRadius: 1).fill(color))
-                    .compositingGroup()
-                    .shadow(color: .black, radius: 3)
-                    .opacity(self.pressed ? 0.8 : 1.0)
-                    .scaleEffect(self.pressed ? 0.9 : 1.0)
-                    .onLongPressGesture(minimumDuration: 2.5, maximumDistance: .infinity, pressing: { pressing in
-                    withAnimation(.easeInOut(duration: 1)) {
-                        self.pressed = pressing
-//                        print("call: \(GamificationView().environmentObject(UserData().username))")
-                    }
-//                    if pressing {
-//                            print("col: \(col)")
-//
-//                    } else {
-//                        print("My long pressed ends")
-//
-//                    }
-                }, perform: { })
-            }
-        }
-    }
     let encouragementTextArray = ["👋🏼 כל הכבוד 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
 //    @EnvironmentObject var userData: UserData
+
     var body: some View {
         ZStack {
-            Image(uiImage: localBackgroundImage.count <= (currentLevel-1) ? UIImage(named: "Loading.jpg")! : localBackgroundImage[currentLevel-1]!)
-//            Image(uiImage: localBackgroundImage[currentLevel-1]!)
-                .resizable()
-                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                .aspectRatio(contentMode: .fit)
-                .aspectRatio(contentMode: .fit)
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            BackgroundPuzzleImage
             VStack{
                 Text("Level \(currentLevel)")
                     .bold()
                 Spacer()
             }
-                
             VStack(spacing: 1) {
-                //            Spacer()
-                ForEach(0..<4) {row in
-                    HStack(spacing: 1) {
-                        //                    Spacer()
-                        ForEach(0..<4) { col in
-                            Button {
-                                currentButton = col+4*row
-//                                userData.username = "saar"
-                                currentEquation = (levelComplete ? "Advancing to level \(currentLevel)" : initmathDictionary[currentButton])
-                                populateAnswers()
-                            } label: {
-                                Text(self.showImage[col+4*row] ? "" : initmathDictionary[col+4*row])
-                                    .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity,maxHeight: .infinity)
-                                    .background(self.showImage[col+4*row] ? Color.clear : .indigo)
-                                    .tag("\(col+4*row)")
-                            }
-                            .disabled(disableButton[col+4*row])
-//                            .buttonStyle(MyButtonStyle(color: .clear, col: col, row: row))
-                            #warning("Hide the background of the button when pressed (non-clear)")
-                        }
-                        .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
-                    }.ignoresSafeArea()
-                }
-                            Spacer()
+                QuestionButtons
+//                    .task(){
+//                        if(displayStartGameButton == false ) {
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                                allTilesDisabled = false
+//                                print("Disable tile removed")
+//                            }
+//                        }
+//                    }
+                Spacer()
                     .frame(minWidth: 100, maxWidth: .infinity)
                     .background(.black)
                     .opacity(0.9)
@@ -154,6 +98,41 @@ struct GameFile: View {
             .navigationBarHidden(true)
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
         }
+    }
+    
+    var QuestionButtons: some View {
+        ForEach(0..<4) {row in
+            HStack(spacing: 1) {
+                //                    Spacer()
+                ForEach(0..<4) { col in
+                    Button {
+                        currentButton = col+4*row
+                        //                                userData.username = "saar"
+                        currentEquation = (levelComplete ? "Advancing to level \(currentLevel)" : initmathDictionary[currentButton])
+                        populateAnswers()
+                    } label: {
+                        Text(self.showImage[col+4*row] ? "" : initmathDictionary[col+4*row])
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity)
+                            .background(self.showImage[col+4*row] ? Color.clear : .indigo)
+                            .tag("\(col+4*row)")
+                    }
+                    .disabled(disableButton[col+4*row] || allTilesDisabled)
+#warning("Hide the background of the button when pressed (non-clear)")
+                }
+                .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+            }.ignoresSafeArea()
+        }
+    }
+    var BackgroundPuzzleImage: some View {
+        Image(uiImage: localBackgroundImage.count <= (currentLevel-1) ? UIImage(named: "Loading.jpg")! : localBackgroundImage[currentLevel-1]!)
+//            Image(uiImage: localBackgroundImage[currentLevel-1]!)
+            .resizable()
+            .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: .fit)
+            .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
     }
     
 //    private func initDictionary()    {
@@ -218,7 +197,7 @@ struct GameFile: View {
     }
     private func populateQuestions(){
         var keyNumber = 0
-        print("Inserting to initmathDict \(pmathDictionary.count)")
+//        print("Inserting to initmathDict \(pmathDictionary.count)")
         for eq in pmathDictionary {
             if keyNumber > 15 {
                 perror("Too many elements in dictionary \(pmathDictionary.count)")
@@ -237,12 +216,10 @@ struct GameFile: View {
         disalbeAnswerButtonsUntilNextQuestion = false
     }
     private var startGameButton: some View {
-        
         HStack(spacing: 16) {
             VStack {
                 Button {
                     startGame()
-                    //            dismiss()
                 }label: {
                     Text("Start game 🕺🏻")
                         .font(.system(size: 122, weight: .bold))
@@ -254,12 +231,6 @@ struct GameFile: View {
         }
     }
                    
-    private func delayLevel() async {
-        // Delay of 7.5 seconds (1 second = 1_000_000_000 nanoseconds)
-        try? await Task.sleep(nanoseconds: 7_500_000_000)
-//        hasTimeElapsed = true
-        buildLevel(level: currentLevel)
-    }
     private var showAnswerButtons: some View {
         VStack {
             Button {
@@ -277,8 +248,12 @@ struct GameFile: View {
                 .padding(.horizontal)
                 .shadow(radius: 15)
                 
-
-            }.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            }
+            .simultaneousGesture(TapGesture(count: 3).onEnded {
+                presentationMode.wrappedValue.dismiss()
+            })
+            .buttonStyle(MyButtonStyle(color: .black))
+//            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             HStack {
                 Button {
                     checkAnswer(userAnswered: 0)
@@ -346,7 +321,6 @@ struct GameFile: View {
         }
     }
     private func wrongAnswer() {
-//        AudioServicesPlaySystemSound(SystemSoundID(1000))
         mistakesInLevel += 1
         playSounds("WrongAnswer.aiff")
 
@@ -423,5 +397,5 @@ struct GameFile: View {
 }
 
 #Preview {
-    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpeg")/*, UIImage(named: "DefaultImage2.heic")*/])
+    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg"), UIImage(named: "Loading.jpg")])
 }
