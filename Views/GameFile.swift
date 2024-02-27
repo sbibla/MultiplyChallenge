@@ -23,10 +23,10 @@ struct GameFile: View {
 //        }
 //        startGame()
 //    }
-    init(localBackgroundImage: [UIImage?] = [nil]){
-        _localBackgroundImage = State(initialValue: localBackgroundImage)
-        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
-    }
+//    init(localBackgroundImage: [UIImage?] = [nil]){
+//        _localBackgroundImage = State(initialValue: localBackgroundImage)
+//        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
+//    }
     
     @State var audioPlayer: AVAudioPlayer!
     @State var sound = false
@@ -63,6 +63,9 @@ struct GameFile: View {
     @State private var testMode = false
     @State var advanceToNextLevel = false
     @State private var allTilesDisabled = false
+    @State private var isPresented = false
+    @State var startBonusLevel = false
+    
     @Environment(\.presentationMode) var presentationMode
 
 
@@ -80,14 +83,6 @@ struct GameFile: View {
             }
             VStack(spacing: 1) {
                 QuestionButtons
-//                    .task(){
-//                        if(displayStartGameButton == false ) {
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                                allTilesDisabled = false
-//                                print("Disable tile removed")
-//                            }
-//                        }
-//                    }
                 Spacer()
                     .frame(minWidth: 100, maxWidth: .infinity)
                     .background(.black)
@@ -97,6 +92,9 @@ struct GameFile: View {
                 showAnswerButtons, alignment: .bottom)
             .navigationBarHidden(true)
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
+            .fullScreenCover(isPresented: $isPresented, content: {
+                BonusView(isPresented: $isPresented)
+            })
         }
     }
     
@@ -127,7 +125,6 @@ struct GameFile: View {
     }
     var BackgroundPuzzleImage: some View {
         Image(uiImage: localBackgroundImage.count <= (currentLevel-1) ? UIImage(named: "Loading.jpg")! : localBackgroundImage[currentLevel-1]!)
-//            Image(uiImage: localBackgroundImage[currentLevel-1]!)
             .resizable()
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .aspectRatio(contentMode: .fit)
@@ -250,7 +247,12 @@ struct GameFile: View {
                 
             }
             .simultaneousGesture(TapGesture(count: 3).onEnded {
-                presentationMode.wrappedValue.dismiss()
+                if(testMode) {
+                    currentLevel += 1
+                    print("NextLevel pressed")
+                }else {
+                    presentationMode.wrappedValue.dismiss()
+                }
             })
             .buttonStyle(MyButtonStyle(color: .black))
 //            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
@@ -339,8 +341,16 @@ struct GameFile: View {
             disalbeAnswerButtonsUntilNextQuestion = false
             if mistakesInLevel < 5 {
                 advanceToNextLevel = true
-                currentEquation = "Setting Level \(currentLevel+1)"
-                playSounds("NextLevel.aiff")
+                //check if Bonus level
+                if (currentLevel % 3 == 0) {
+                    playSounds("Bonus.wav")
+//                    startBonusLevel.toggle()
+                    isPresented.toggle()
+                } else {
+                
+                    currentEquation = "Setting Level \(currentLevel+1)"
+                    playSounds("NextLevel.aiff")
+                }
             }else {
                 advanceToNextLevel = false
                 print("Too many mistakes, repeat level")

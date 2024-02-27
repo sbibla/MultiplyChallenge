@@ -29,6 +29,8 @@
 		6457E90A2B854A20005A1338 /* MyButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6457E9092B854A20005A1338 /* MyButtonModel.swift */; };
 		6457E9112B8690C2005A1338 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6457E9102B8690C2005A1338 /* LoginView.swift */; };
 		6457E9132B86CFCA005A1338 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6457E9122B86CFCA005A1338 /* SettingsView.swift */; };
+		6457E9152B890989005A1338 /* Bigger.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6457E9142B890989005A1338 /* Bigger.jpeg */; };
+		646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 646CCF1A2B8DB76200CBE526 /* Bonus.wav */; };
 		647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */; };
 		647996992B7EEA0500B38283 /* InitScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996982B7EEA0500B38283 /* InitScreen.swift */; };
 		6479969B2B7EEA0600B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6479969A2B7EEA0600B38283 /* Assets.xcassets */; };
@@ -65,6 +67,8 @@
 		6457E9092B854A20005A1338 /* MyButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyButtonModel.swift; sourceTree = "<group>"; };
 		6457E9102B8690C2005A1338 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		6457E9122B86CFCA005A1338 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6457E9142B890989005A1338 /* Bigger.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bigger.jpeg; sourceTree = "<group>"; };
+		646CCF1A2B8DB76200CBE526 /* Bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Bonus.wav; sourceTree = "<group>"; };
 		647996932B7EEA0500B38283 /* MultiplyMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiplyMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyChallengeApp.swift; sourceTree = "<group>"; };
 		647996982B7EEA0500B38283 /* InitScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitScreen.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 				6457E9072B85351C005A1338 /* spaceImage.jpg */,
 				6457E8DF2B83F17A005A1338 /* launchScreen.jpg */,
 				6457E9032B848B7D005A1338 /* Loading.jpg */,
+				6457E9142B890989005A1338 /* Bigger.jpeg */,
 				6479969C2B7EEA0600B38283 /* Preview Content */,
 			);
 			path = MultiplyChallenge;
@@ -189,6 +194,7 @@
 				647996BF2B817E9700B38283 /* CorrectAnswer.wav */,
 				647996C22B817E9700B38283 /* NextLevel.aiff */,
 				647996C02B817E9700B38283 /* RepeatLevel.aiff */,
+				646CCF1A2B8DB76200CBE526 /* Bonus.wav */,
 				647996C12B817E9700B38283 /* WrongAnswer.aiff */,
 			);
 			path = AudioBits;
@@ -253,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6457E8FD2B8433D5005A1338 /* DefaultImage10.jpg in Resources */,
+				646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */,
 				6457E8E02B83F17A005A1338 /* launchScreen.jpg in Resources */,
 				647996C52B817E9700B38283 /* WrongAnswer.aiff in Resources */,
 				647996C62B817E9700B38283 /* NextLevel.aiff in Resources */,
@@ -275,6 +282,7 @@
 				647996C42B817E9700B38283 /* RepeatLevel.aiff in Resources */,
 				6457E8FA2B8433D5005A1338 /* DefaultImage9.jpg in Resources */,
 				6457E9002B8433D5005A1338 /* DefaultImage2.jpg in Resources */,
+				6457E9152B890989005A1338 /* Bigger.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

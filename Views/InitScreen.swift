@@ -13,10 +13,12 @@ struct InitScreen: View {
     @State var startGame = false
     @State private var photosPickerItems: [PhotosPickerItem] = []
     @State var backgroundImages: [UIImage] = [UIImage(named: "DefaultImage1.jpg")!, UIImage(named: "DefaultImage2.jpg")!, UIImage(named: "DefaultImage3.jpg")!, UIImage(named: "DefaultImage4.jpg")!, UIImage(named: "DefaultImage5.jpg")!, UIImage(named: "DefaultImage6.jpg")!, UIImage(named: "DefaultImage7.jpg")!, UIImage(named: "DefaultImage8.jpg")!, UIImage(named: "DefaultImage10.jpg")!,UIImage(named: "DefaultImage9.jpg")!, UIImage(named: "DefaultImage10.jpg")!, UIImage(named: "DefaultImage11.jpg")!, UIImage(named: "DefaultImage12.jpg")!, UIImage(named: "DefaultImage13.jpg")!]
+//    @State var backgroundImages: [UIImage] = []
     @State var emailAddress = ""
     @State var password = ""
     @State var withLoginOption = true
     @State var userHasPickedImages = false
+    @State var tmpImage = UIImage(named: "Loading.jpg")!
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
                                   endPoint: .bottomTrailing)
@@ -28,8 +30,12 @@ struct InitScreen: View {
 //            VStack {
                 
                 HeaderView()
+                Image(uiImage: tmpImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(Circle())
                 
-//                PhotosPicker("Choose Images", selection: $photosPickerItems,maxSelectionCount: 10, selectionBehavior: .ordered, matching: .images)
+                PhotosPicker("Choose Images", selection: $photosPickerItems,maxSelectionCount: 20, selectionBehavior: .ordered, matching: .images)
                 //                .foregroundColor(.black)
                 LoginView(emailAddress: emailAddress, password: password)
                     .opacity(withLoginOption ? 1 : 0)
@@ -48,7 +54,9 @@ struct InitScreen: View {
                         .bold()
                 }
                 Button {
-                    print("empty button for now")
+                    print("Calling load images func")
+//                    startBonusLevel.toggle()
+                    loadImagesFromLocalStorage()
                 }label: {
                     Text("🕺🏻New here? \n Create An Account")
                         .font(.system(size: 15))
@@ -64,8 +72,31 @@ struct InitScreen: View {
                         //                    saveImagesToLocalStorage()
                     }
                 }
+                .onAppear{
+                    Task {
+                        if loadImagesFromLocalStorage() == false {
+                            #if DEBUG
+                            print("⚙️ Running for the first time, load default images")
+                            #endif
+                            
+                        }else {
+                            #if DEBUG
+                            print("⚙️ \(backgroundImages.count) Images successfully loaded from local storage")
+                            #endif
+                        }
+                    }
+                }
             }//.background(Color(UIColor.black)) //VStack
         }
+    }
+    
+    func loadDefaultImages(){
+        var startPoint = 1
+        while backgroundImages.count < 13 {
+            backgroundImages.append(UIImage(named: "DefaultImage\(startPoint).jpg")!)
+            startPoint+=1
+        }
+        saveImagesToLocalStorage()
     }
     func copyImagesToArray() async  {
         backgroundImages.removeAll()
@@ -93,6 +124,47 @@ struct InitScreen: View {
     }
     
     @State private var storedImage: UIImage?
+    
+    func loadUserData(){
+        //loadLocalImages from Storage
+        if loadImagesFromLocalStorage() == false {
+            print("Using default Images")
+        }
+        //load highscore
+        
+    }
+    #warning("ToDo: Update load to include more than 13 images, if less take from default.")
+    func loadImagesFromLocalStorage() -> Bool{
+        backgroundImages.removeAll()
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var startPoint = 1
+        var name = "UserImage\(startPoint).jpg"
+        var imagePath = path
+            .appendingPathComponent("userBackgroundImages")
+            .appendingPathComponent(name)
+        
+        
+        while backgroundImages.count < 13 {
+            if !FileManager.default.fileExists(atPath: imagePath.path){
+                print("File \(imagePath.absoluteString) is missing, exiting")
+                return false
+            }
+#if DEBUG
+            print("⚙️ Image loaded \(imagePath.absoluteString)")
+#endif
+            tmpImage = UIImage(contentsOfFile: imagePath.path)!
+            backgroundImages.append(tmpImage)
+            startPoint += 1
+            name = "UserImage\(startPoint).jpg"
+            imagePath = path
+                .appendingPathComponent("userBackgroundImages")
+                .appendingPathComponent(name)
+#if DEBUG
+            print("⚙️ Images Count: \(backgroundImages.count)")
+#endif
+        }
+        return true
+    }
     
     func saveImagesToLocalStorage(){
         if backgroundImages.count > 0 {
