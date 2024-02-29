@@ -11,7 +11,12 @@ import SwiftUI
 struct MultiplyChallengeApp: App {
     var body: some Scene {
         WindowGroup {
+            //            InitScreen( mySoundPtr: InitScreen.Sounds(CorrectAnswer: nil, NextLevel: nil, WrongAnswer: nil))
             InitScreen()
+                .task {
+                    logManager.shared.userLogLevel = .debug
+                    logManager.shared.logMessage("Init logger with level", .info)
+                }
         }
     }
 }

@@ -23,7 +23,7 @@ struct LoginView: View {
                 .autocorrectionDisabled()
             Button {
                 //Attempt login
-                print("Login user \(emailAddress) pass \(password)")
+                logManager.shared.logMessage("Login user \(emailAddress) pass \(password)", .debug)
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)

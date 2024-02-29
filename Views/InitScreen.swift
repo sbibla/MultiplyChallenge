@@ -7,6 +7,9 @@
 
 import SwiftUI
 import PhotosUI
+import AudioToolbox
+import AVFoundation
+
 
 struct InitScreen: View {
     @State private var isMultiPlayer = false
@@ -16,13 +19,21 @@ struct InitScreen: View {
 //    @State var backgroundImages: [UIImage] = []
     @State var emailAddress = ""
     @State var password = ""
-    @State var withLoginOption = true
+    @State var highScore = 0
+    @State var soundOn = true
+    @State var withLoginOption = false
     @State var userHasPickedImages = false
     @State var tmpImage = UIImage(named: "Loading.jpg")!
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
                                   endPoint: .bottomTrailing)
-    
+//    struct Sounds  {
+//        let CorrectAnswer: URL?
+//        let NextLevel: URL?
+//        let WrongAnswer: URL?
+//    }
+//    @State var mySoundPtr: Sounds
+//    
     var body: some View {
         ZStack {
             VStack {
@@ -41,7 +52,7 @@ struct InitScreen: View {
                     .opacity(withLoginOption ? 1 : 0)
                 Spacer()
                 Button {
-                    print("Starting game for user \(emailAddress)")
+                    logManager.shared.logMessage("Starting game for user \(emailAddress)", .debug)
                     startGame.toggle()
                 } label: {
                     Text("Start Game")
@@ -54,9 +65,10 @@ struct InitScreen: View {
                         .bold()
                 }
                 Button {
-                    print("Calling load images func")
+                    logManager.shared.logMessage("Calling load images func", .debug)
 //                    startBonusLevel.toggle()
-                    loadImagesFromLocalStorage()
+//                    loadImagesFromLocalStorage()
+                    
                 }label: {
                     Text("🕺🏻New here? \n Create An Account")
                         .font(.system(size: 15))
@@ -64,7 +76,7 @@ struct InitScreen: View {
                 }
                 .padding()
                 .fullScreenCover(isPresented: $startGame, content: {
-                    GameFile(localBackgroundImage: backgroundImages)
+                    GameFile(localBackgroundImage: backgroundImages, highScore: highScore)
                 })
                 .onChange(of: photosPickerItems) { _, _ in
                     Task {
@@ -74,16 +86,7 @@ struct InitScreen: View {
                 }
                 .onAppear{
                     Task {
-                        if loadImagesFromLocalStorage() == false {
-                            #if DEBUG
-                            print("⚙️ Running for the first time, load default images")
-                            #endif
-                            
-                        }else {
-                            #if DEBUG
-                            print("⚙️ \(backgroundImages.count) Images successfully loaded from local storage")
-                            #endif
-                        }
+                            loadUserData()
                     }
                 }
             }//.background(Color(UIColor.black)) //VStack
@@ -104,16 +107,17 @@ struct InitScreen: View {
             if let data = try? await item.loadTransferable(type: Data.self){
                 if let image = UIImage(data: data){
                     backgroundImages.append(image)
+                    logManager.shared.logMessage("\(#line):added user picked Image", .debug)
                 }
             }
         }
         photosPickerItems.removeAll()
         userHasPickedImages = true
         if backgroundImages.count == 0 {
-            print("Called for 2nd time, exiting")
+            logManager.shared.logMessage("Called for 2nd time, exiting", .warning)
             return
         }
-        print("User picked \(backgroundImages.count) Images")
+        logManager.shared.logMessage("User picked \(backgroundImages.count) Images", .debug)
         var startPoint = backgroundImages.count+1
         while backgroundImages.count < 13 {
             backgroundImages.append(UIImage(named: "DefaultImage\(startPoint).jpg")!)
@@ -128,11 +132,25 @@ struct InitScreen: View {
     func loadUserData(){
         //loadLocalImages from Storage
         if loadImagesFromLocalStorage() == false {
-            print("Using default Images")
+            logManager.shared.logMessage("Running for the first time, loading default images", .debug)
+        }else {
+            logManager.shared.logMessage("\(backgroundImages.count) Images successfully loaded from local storage", .debug)
         }
-        //load highscore
         
+        //load highscore
+        loadHighScoreData()
     }
+    func loadHighScoreData(){
+        let savedScore = UserDefaults.standard.integer(forKey: "highScore")
+        if (savedScore == 0) {
+            highScore = 0
+            logManager.shared.logMessage("No saved highScore", .warning)
+        } else {
+            highScore = savedScore
+            logManager.shared.logMessage("Found high score value: \(savedScore)", .info)
+        }
+    }
+    
     #warning("ToDo: Update load to include more than 13 images, if less take from default.")
     func loadImagesFromLocalStorage() -> Bool{
         backgroundImages.removeAll()
@@ -143,15 +161,13 @@ struct InitScreen: View {
             .appendingPathComponent("userBackgroundImages")
             .appendingPathComponent(name)
         
-        
+    
         while backgroundImages.count < 13 {
             if !FileManager.default.fileExists(atPath: imagePath.path){
-                print("File \(imagePath.absoluteString) is missing, exiting")
+                logManager.shared.logMessage("File \(imagePath.absoluteString) is missing, exiting", .warning)
                 return false
             }
-#if DEBUG
-            print("⚙️ Image loaded \(imagePath.absoluteString)")
-#endif
+            logManager.shared.logMessage("Image loaded \(imagePath.absoluteString)", .debug)
             tmpImage = UIImage(contentsOfFile: imagePath.path)!
             backgroundImages.append(tmpImage)
             startPoint += 1
@@ -160,17 +176,39 @@ struct InitScreen: View {
                 .appendingPathComponent("userBackgroundImages")
                 .appendingPathComponent(name)
 #if DEBUG
-            print("⚙️ Images Count: \(backgroundImages.count)")
+            logManager.shared.logMessage("Images Count: \(backgroundImages.count)", .debug)
 #endif
         }
         return true
     }
     
+//    func playSounds(_ soundFileName : String) {
+//        
+//        if soundOn == false {             // Have a toggle to mute sound in app
+//            logManager.shared.logMessage("All sounds are muted")
+//            return
+//        }
+//        mySoundPtr = Sounds(CorrectAnswer: Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil), NextLevel: Bundle.main.url(forResource: "NextLevel.aiff", withExtension: nil), WrongAnswer:  Bundle.main.url(forResource: "WrongAnswer.aiff", withExtension: nil))
+        //Init all sounds once
+        
+//        guard let bla.CorrectAnswer = Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil) else {
+//            fatalError("Unable to find \(soundFileName) in bundle")
+//        }
+        
+//        
+//        do {
+//            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+//        } catch {
+//            logManager.shared.logMessage(error.localizedDescription, .warning)
+//        }
+//        audioPlayer.play()
+//    }
+    
     func saveImagesToLocalStorage(){
         if backgroundImages.count > 0 {
             storedImage = backgroundImages[0]
         } else {
-            print("No images to store")
+            logManager.shared.logMessage("No images to store", .warning)
             return
         }
         //convert backgroundImages to Data
@@ -181,11 +219,11 @@ struct InitScreen: View {
             do {
                 try FileManager.default.createDirectory(atPath: dir_path.path, withIntermediateDirectories: true, attributes: nil)
 #if DEBUG
-                print("⚙️ Created Directory: \(dir_path.absoluteString)")
+                logManager.shared.logMessage("Created Directory: \(dir_path.absoluteString)", .debug)
 #endif
             }
             catch{
-                print("Error creating user directory \(error.localizedDescription)")
+                logManager.shared.logMessage("Error creating user directory \(error.localizedDescription)", .warning)
             }
         }
         
@@ -194,16 +232,16 @@ struct InitScreen: View {
         for userImage in backgroundImages {
             let img_dir = dir_path.appendingPathComponent(name)
 #if DEBUG
-            print("⚙️ saving file to path: \(img_dir.absoluteString)")
+            logManager.shared.logMessage("Saving file to path: \(img_dir.absoluteString)", .debug)
 #endif
             do {
                 try userImage.jpegData(compressionQuality: 50)?.write(to: img_dir)
                 #if DEBUG
-                print("Image saved to: \(img_dir.absoluteString)")
+                logManager.shared.logMessage("Image saved to: \(img_dir.absoluteString)", .debug)
                 #endif
             }
             catch {
-                print("Failed to save image err:"+error.localizedDescription)
+                logManager.shared.logMessage("Failed to save image err:"+error.localizedDescription, .warning)
             }
             startPoint+=1
             name = "UserImage\(startPoint).jpg"
@@ -215,4 +253,5 @@ struct InitScreen: View {
 
 #Preview {
     InitScreen()
+//    InitScreen( mySoundPtr: InitScreen.Sounds(CorrectAnswer: nil, NextLevel: nil, WrongAnswer: nil))
 }

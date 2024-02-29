@@ -22,7 +22,7 @@ class MathQuestionBuilder: NSObject {
         resultTwo = 0
         resultThree = 0
         correctAnsLocation = 0
-        print("Init Game")
+        logManager.shared.logMessage("Init Game", .debug)
     }
     
     public func generateMultiplicationEquation(_ level: Int)->(String, Int, Int, Int, Int)
@@ -74,7 +74,7 @@ class MathQuestionBuilder: NSObject {
         case 2:
             resultLocation.2 += 1
             return (equation,z,y,x,2)
-        default: print("error in modulo")
+        default: logManager.shared.logMessage("error in modulo", .warning)
             return(equation,x,y,z,3)
         }
         

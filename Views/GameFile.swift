@@ -29,9 +29,9 @@ struct GameFile: View {
 //    }
     
     @State var audioPlayer: AVAudioPlayer!
-    @State var sound = false
+    @State var soundsMuted = false
 
-    
+  
     @State private var showImage = [false, false, false, false,
                                     false, false, false, false,
                                     false, false, false, false,
@@ -46,18 +46,22 @@ struct GameFile: View {
                                      "2+1=?", "2+2=?", "2+3=?", "2+4=?",
                                      "3+1=?", "3+2=?", "3+3=?", "3+4=?",
                                      "4+1=?", "4+2=?", "4+3=?", "4+4=?"]
+    
+//    @State var initmathDictionary: [String] = []
+    
     @State private var pmathDictionary: [String: (Int, Int, Int, Int)] = [:]
     @State var currentEquation = "Level 1"
     @State var displayStartGameButton = true
     @State var currentEquationAnswers = ["Ans1", "Ans2", "Ans3"]
     @State var currentButton = 0
     @State var levelComplete = false
+    @State var soundsInitialized = false
     @State private var dbStatusMessage = ""
     @State var mistakesInLevel = 0
     @State private var puzzlePickedImage: UIImage?
     @State var gameBackgroundImagesDictionary: [Int: UIImage] = [:]
     @State var shouldShowImagePicker = false
-    @State var currentLevel = 1
+    @State var currentLevel = 3
     @State var disalbeAnswerButtonsUntilNextQuestion = false
     @State private var hasTimeElapsed = false
     @State private var testMode = false
@@ -65,6 +69,12 @@ struct GameFile: View {
     @State private var allTilesDisabled = false
     @State private var isPresented = false
     @State var startBonusLevel = false
+    @State var highScore: Int
+    @State var CorrectAnswer: URL? = nil
+    @State var NextLevel: URL? = nil
+    @State var RepeatLevel: URL? = nil
+    @State var Bonus: URL? = nil
+    @State var WrongAnswer: URL? = nil
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -93,7 +103,7 @@ struct GameFile: View {
             .navigationBarHidden(true)
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
             .fullScreenCover(isPresented: $isPresented, content: {
-                BonusView(isPresented: $isPresented)
+                BonusView(isPresented: $isPresented, highScore: $highScore)
             })
         }
     }
@@ -138,8 +148,39 @@ struct GameFile: View {
 //        }
 //    }
 //
+    func initSounds(){
+        logManager.shared.logMessage("Initializing sounds", .debug)
+        CorrectAnswer = Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil)
+        if CorrectAnswer == nil { fatalError("Unable to find CorrrectAnswer.wav in bundle") }
+        
+        NextLevel = Bundle.main.url(forResource: "NextLevel.aiff", withExtension: nil)
+        if NextLevel == nil {    fatalError("Unable to find NextLevel.aiff in bundle") }
+        
+        RepeatLevel = Bundle.main.url(forResource: "RepeatLevel.aiff", withExtension: nil)
+        if RepeatLevel == nil { fatalError("Unable to find RepeatLevel.aiff in bundle") }
+        
+        Bonus = Bundle.main.url(forResource: "Bonus.wav", withExtension: nil)
+        if Bonus == nil { fatalError("Unable to find Bonus.wav in bundle") }
+        
+        WrongAnswer = Bundle.main.url(forResource: "WrongAnswer.aiff", withExtension: nil)
+        if WrongAnswer == nil { fatalError("Unable to find WrongAnswer.aiff in bundle") }
+    }
+    
+    func playSounds(_ soundURL: URL){
+        if soundsMuted == true {
+            return
+        }else {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            } catch {
+                logManager.shared.logMessage(error.localizedDescription, .warning)
+            }
+            audioPlayer.play()
+        }
+    }
+    
     func playSounds(_ soundFileName : String) {
-        if sound == false {             // Have a toggle to mute sound in app
+        if soundsMuted == true {             // Have a toggle to mute sound in app
             guard let soundURL = Bundle.main.url(forResource: soundFileName, withExtension: nil) else {
                 fatalError("Unable to find \(soundFileName) in bundle")
             }
@@ -147,29 +188,29 @@ struct GameFile: View {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             } catch {
-                print(error.localizedDescription)
+                logManager.shared.logMessage(error.localizedDescription, .warning)
             }
             audioPlayer.play()
         }
     }
+    
     private func buildLevel(level: Int) {
         var resultOne, resultTwo, resultThree, resultLocation: Int
         var equation = ""
         mistakesInLevel = 0
         pmathDictionary.removeAll()
-        print("Starting new game, pmathSize:\(pmathDictionary.count)")
+        logManager.shared.logMessage("Starting new game, pmathSize:\(pmathDictionary.count)", .debug)
         
 //        building dictionary until reaches 16 questions. Looping to remove duplicate keys
         while pmathDictionary.count < 16 {
             (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
-            if testMode {
-                print("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)")
-            }            
+                logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
+            
             if (pmathDictionary.updateValue((resultOne, resultTwo, resultThree, resultLocation), forKey: equation) != nil) {
-                print("value \(equation) already exists")
+                logManager.shared.logMessage("value \(equation) already exists", .debug)
             }
         }
-        print("Dictionary built with size \(pmathDictionary.count)")
+        logManager.shared.logMessage("Dictionary built with size \(pmathDictionary.count)", .debug )
         initLevelButtons()
         advanceToNextLevel = false
     }
@@ -184,26 +225,33 @@ struct GameFile: View {
         levelComplete = false
         buildLevel(level: currentLevel)
         populateQuestions()
-        
-        if testMode {
-            for eq in pmathDictionary {
-                print("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)")
-            }
-            print("size: \(pmathDictionary.count)")
+        if soundsInitialized == false {
+            initSounds()
+            soundsInitialized = true
         }
+        
+       
+            for eq in pmathDictionary {
+                logManager.shared.logMessage("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)", .debug)
+        }
+        logManager.shared.logMessage("Starting game with \(pmathDictionary.count) questions in each level \n Current level \(currentLevel   )", .info)
     }
+    
     private func populateQuestions(){
         var keyNumber = 0
-//        print("Inserting to initmathDict \(pmathDictionary.count)")
+        
+        initmathDictionary.removeAll()
+        
+        
         for eq in pmathDictionary {
             if keyNumber > 15 {
                 perror("Too many elements in dictionary \(pmathDictionary.count)")
                 return}
 
-            initmathDictionary[keyNumber] = eq.key
-//            initmathDictionary.append(eq.key)
+//            initmathDictionary[keyNumber] = eq.key
+            initmathDictionary.append(eq.key)
             keyNumber+=1
-            #warning("Hardcoded keyNumber will cause index out of range")
+//            #warning("Hardcoded keyNumber will cause index out of range")
         }
     }
     func populateAnswers(){
@@ -324,12 +372,13 @@ struct GameFile: View {
     }
     private func wrongAnswer() {
         mistakesInLevel += 1
-        playSounds("WrongAnswer.aiff")
+        playSounds(WrongAnswer!)
 
     }
     private func correctAnswer() {
         print("Answered correctly")
-        playSounds("CorrectAnswer.wav")
+//        playSounds("CorrectAnswer.wav")
+        playSounds(CorrectAnswer!)
         showImage[currentButton].toggle()
         disableButton[currentButton].toggle()
         disalbeAnswerButtonsUntilNextQuestion.toggle()
@@ -343,19 +392,19 @@ struct GameFile: View {
                 advanceToNextLevel = true
                 //check if Bonus level
                 if (currentLevel % 3 == 0) {
-                    playSounds("Bonus.wav")
+                    playSounds(Bonus!)
 //                    startBonusLevel.toggle()
                     isPresented.toggle()
                 } else {
                 
                     currentEquation = "Setting Level \(currentLevel+1)"
-                    playSounds("NextLevel.aiff")
+                    playSounds(NextLevel!)
                 }
             }else {
                 advanceToNextLevel = false
                 print("Too many mistakes, repeat level")
                 currentEquation = "Repeat Level \(currentLevel)"
-                playSounds("RepeatLevel.aiff")
+                playSounds(RepeatLevel!)
             }
             
 //            announceLevelWinner()
@@ -407,5 +456,5 @@ struct GameFile: View {
 }
 
 #Preview {
-    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg"), UIImage(named: "Loading.jpg")])
+    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg"), UIImage(named: "Loading.jpg")], highScore: 0)
 }

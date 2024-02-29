@@ -19,7 +19,7 @@ struct BonusView: View {
     @State private var literal4: Int = 8
     @State private var answer: Int = 0
     @State private var score: Int = 0
-    @State private var highScore: Int = 0
+    
     @State private var timeRemaining: Double = 60.0
     @State private var isGameOver: Bool = false
     @State var audioPlayer: AVAudioPlayer!
@@ -27,6 +27,7 @@ struct BonusView: View {
     @State var answerLabel: String?
     @State var showBonusIntro = true
     @Binding var isPresented: Bool
+    @Binding var highScore: Int
     @Environment(\.presentationMode) var presentationMode
 
     
@@ -46,6 +47,10 @@ struct BonusView: View {
                     .mask(
                                    LinearGradient(gradient: Gradient(colors: [Color.black, Color.black, Color.black, Color.black.opacity(0)]), startPoint: .top, endPoint: .bottom)
                                )
+                Text("Highest Score \(highScore)")
+                    .font(.system(size: 20))
+                    .foregroundColor(.red)
+                    .opacity(0.8)
                 Spacer()
 //                VStack {
                     HStack(spacing: 40) {
@@ -108,21 +113,20 @@ struct BonusView: View {
                                                    )
                                 }
                             }.disabled(isGameOver)
-                            
                         }
                     }.foregroundColor(.white)
                 Spacer()
                 HStack {
                     Text("Score: \(score)")
+                        .font(.system(size: 20))
                     Text("Time: \(Int(timeRemaining))")
+                        .font(.system(size: 20))
                 }.foregroundColor(.red)
                 if isGameOver {
                     Text("Game Over! Score: \(score)")
                         .font(.title)
                     Text("Highest Score \(highScore)")
                     Button("Return to Game") {
-//                        resetGame()
-//                        presentationMode.wrappedValue.dismiss()
                         isPresented.toggle()
                     }
                 }
@@ -130,6 +134,7 @@ struct BonusView: View {
         }
         .onAppear {
             generateEquations()
+//            loadHighScoreData()
         }
         .onReceive(timer) { _ in
             if timeRemaining > 0 {
@@ -137,6 +142,7 @@ struct BonusView: View {
             } else {
                 if score > highScore {
                     highScore = score
+                    writeHighScoreData(data: highScore, Key: "highScore")
                 }
                 isGameOver = true
             }
@@ -149,8 +155,7 @@ struct BonusView: View {
             VStack {
                 Button {
                     timeRemaining = 60.0
-                    showBonusIntro.toggle()
-                    
+                    showBonusIntro.toggle()                    
                 }label: {
                     Text("Bonus Level\n Starts in:\n\(Int(timeRemaining))")
                         .font(.system(size: 50, weight: .bold))
@@ -161,6 +166,20 @@ struct BonusView: View {
             }
         }
     }
+    func writeHighScoreData(data: Int, Key: String) {
+        UserDefaults.standard.set(data, forKey: Key)
+        logManager.shared.logMessage("High-score \(data.description) saved locally", .debug)
+    }
+//    func loadHighScoreData(){
+//        let savedScore = UserDefaults.standard.integer(forKey: "highScore")
+//        if (savedScore == 0) {
+//            highScore = 0
+//            logManager.shared.logMessage("No saved highScore", .warning)
+//        } else {
+//            highScore = savedScore
+//            logManager.shared.logMessage("Found high score value: \(savedScore)", .info)
+//        }
+//    }
     func generateEquations() {
         // Generate random equations with difficulty levels
         // ... replace with your logic for generating equations
@@ -183,7 +202,7 @@ struct BonusView: View {
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             } catch {
-                print(error.localizedDescription)
+                logManager.shared.logMessage(error.localizedDescription, .warning)
             }
             audioPlayer.play()
         }
@@ -217,6 +236,7 @@ struct BonusView: View {
 }
 
 #Preview {
+//    BonusView(isPresented: $isPresented)
     BonusView2()
     //    MultiplicationComparisonView()
 }
