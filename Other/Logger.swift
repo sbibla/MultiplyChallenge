@@ -12,7 +12,7 @@ import Foundation
 
 class logManager: NSObject {
     
-    var userLogLevel = logLevel.warning
+    var userLogLevel = logLevel.debug
     
     enum logLevel {
         case debug

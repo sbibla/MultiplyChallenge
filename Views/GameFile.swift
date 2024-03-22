@@ -16,7 +16,7 @@ import AVFoundation
 
 
 struct GameFile: View {
-    @State var localBackgroundImage: [UIImage?]
+    @State var localBackgroundImage: [UIImage]
 //    init(img: [UIImage]) {
 //        for myImg in img {
 //            self.localBackgroundImage.append(myImg)
@@ -61,7 +61,7 @@ struct GameFile: View {
     @State private var puzzlePickedImage: UIImage?
     @State var gameBackgroundImagesDictionary: [Int: UIImage] = [:]
     @State var shouldShowImagePicker = false
-    @State var currentLevel = 3
+    @State var currentLevel = 1
     @State var disalbeAnswerButtonsUntilNextQuestion = false
     @State private var hasTimeElapsed = false
     @State private var testMode = false
@@ -134,7 +134,7 @@ struct GameFile: View {
         }
     }
     var BackgroundPuzzleImage: some View {
-        Image(uiImage: localBackgroundImage.count <= (currentLevel-1) ? UIImage(named: "Loading.jpg")! : localBackgroundImage[currentLevel-1]!)
+        Image(uiImage: localBackgroundImage.count <= (currentLevel-1) ? UIImage(named: "Loading.jpg")! : localBackgroundImage[currentLevel-1])
             .resizable()
             .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .aspectRatio(contentMode: .fit)
@@ -263,6 +263,24 @@ struct GameFile: View {
     private var startGameButton: some View {
         HStack(spacing: 16) {
             VStack {
+                if !localBackgroundImage.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(localBackgroundImage, id: \.self) {image in
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(10)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity,maxHeight: 55)
+                    .background(.black)
+                }
+                
+                
+                
                 Button {
                     startGame()
                 }label: {
@@ -456,5 +474,5 @@ struct GameFile: View {
 }
 
 #Preview {
-    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg"), UIImage(named: "Loading.jpg")], highScore: 0)
+    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg")!, UIImage(named: "Loading.jpg")!], highScore: 0)
 }

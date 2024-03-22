@@ -20,7 +20,9 @@ struct BonusView: View {
     @State private var answer: Int = 0
     @State private var score: Int = 0
     
-    @State private var timeRemaining: Double = 60.0
+    @State private var timeRemaining: Double = 65.0
+    @State private var delayStartTimeRemaining: Double = 5
+    @State private var resultDisplayTime: Double = 1
     @State private var isGameOver: Bool = false
     @State var audioPlayer: AVAudioPlayer!
     @State var sound = false
@@ -32,6 +34,10 @@ struct BonusView: View {
 
     
     let timer = Timer.publish(every: 1, on: .main, in: .common)
+        .autoconnect()
+    let delayStartTimer = Timer.publish(every: 1, on: .main, in: .common)
+        .autoconnect()
+    let resultDisplayTimer = Timer.publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
     var body: some View {
@@ -147,6 +153,22 @@ struct BonusView: View {
                 isGameOver = true
             }
         }
+        .onReceive(resultDisplayTimer) { _ in
+            if resultDisplayTime > 0 {
+                resultDisplayTime -= 1
+            }else {
+                answerLabel = nil
+                
+            }
+        }
+        .onReceive(delayStartTimer) { _ in
+            if delayStartTimeRemaining > 1 {
+                delayStartTimeRemaining -= 1
+            }else {
+//                timeRemaining = 60
+                showBonusIntro = false
+            }
+        }
         .overlay(showBonusIntro ? BonusIntroScreen : nil, alignment: .center )
     }
     
@@ -157,7 +179,7 @@ struct BonusView: View {
                     timeRemaining = 60.0
                     showBonusIntro.toggle()                    
                 }label: {
-                    Text("Bonus Level\n Starts in:\n\(Int(timeRemaining))")
+                    Text("Bonus Level\n Starts in\n\(Int(delayStartTimeRemaining))")
                         .font(.system(size: 50, weight: .bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity,maxHeight: .infinity)
@@ -213,6 +235,7 @@ struct BonusView: View {
             score += 1
             answerLabel = "👍🏼"
             playSounds("CorrectAnswer.wav")
+            resultDisplayTime = 1.2
         } else {
             score -= 1
             answerLabel = "👎🏻"
@@ -221,6 +244,7 @@ struct BonusView: View {
                 score = 0
             }
             timeRemaining -= 10
+            resultDisplayTime = 1.2
         }
         generateEquations()
         //        timeRemaining = 60.0
@@ -236,8 +260,9 @@ struct BonusView: View {
 }
 
 #Preview {
-//    BonusView(isPresented: $isPresented)
-    BonusView2()
+//    BonusView(isPresented: $0, highScore: $1)
+    BonusView(isPresented: .constant(true), highScore: .constant(13))
+//    BonusView2()
     //    MultiplicationComparisonView()
 }
 
