@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 @MainActor
 final class PhotoPickerViewModal: ObservableObject {
-    
+    @State var blahImage = UIImage(named: "Loading.jpg")!
     @Published private(set) var selectedImage: UIImage? = nil
     @Published var imageSelection: PhotosPickerItem? = nil {
         didSet {
@@ -23,7 +23,10 @@ final class PhotoPickerViewModal: ObservableObject {
         }
     }
     
-    
+    init() {
+        
+        _ = loadImagesFromLocalStorage(folderName: "userBackgroundImages")
+    }
     private func setImage(from selection: PhotosPickerItem?) {
         guard let selection else { return }
         
@@ -54,19 +57,60 @@ final class PhotoPickerViewModal: ObservableObject {
                 }
             }
             selectedImages = images
+            saveImagesLocally(folderName: "userBackgroundImages")
         }
                 imageSelections.removeAll(keepingCapacity: true)
     }
-    func saveImagesLocally(folderName: String = "UserImageFolder") {
+    
+    func appendDefaultImages(){
+        for index in 1...13 {
+            selectedImages.append(UIImage(named: "DefaultImage\(index).jpg")!)
+        }
+    }
+    func loadImagesFromLocalStorage(folderName: String = "UserImageFolder") -> Int{
+        //Load images until reaches a non-existing file.
+        //Return number of images loaded from file
+        
+        let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var startPoint = 1
+        var name = "UserImage\(startPoint).jpg"
+        var imagePath = path
+            .appendingPathComponent(folderName)
+            .appendingPathComponent(name)
+        
+        while FileManager.default.fileExists(atPath: imagePath.path){
+            logManager.shared.logMessage("Image loaded \(imagePath.absoluteString)", .debug)
+            
+            if let blahImage = UIImage(contentsOfFile: imagePath.path) {
+                selectedImages.append(blahImage)
+            } else {
+                logManager.shared.logMessage("File doesn't exist: \(imagePath.absoluteString), exiting with loadedImageCount \(selectedImages.count)", .warning)
+                break
+            }
+            
+            startPoint += 1
+            name = "UserImage\(startPoint).jpg"
+            imagePath = path
+                .appendingPathComponent("userBackgroundImages")
+                .appendingPathComponent(name)
+        }
+        logManager.shared.logMessage("Found \(startPoint-1) images in local storage", .debug)
+        logManager.shared.logMessage("selectedImages size \(selectedImages.count)", .debug)
+        return startPoint
+    }
+    
+    private func saveImagesLocally(folderName: String = "userBackgroundImages") {
         if selectedImages.isEmpty {
             logManager.shared.logMessage("\(#line) No images to store", .warning)
             return
         }
+        //Delete old images
+        deleteOldImagesFolder(folderName: folderName)
         
             //convert backgroundImages to Data
             let dir_path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 .appendingPathComponent(folderName, isDirectory: true)
-            
+        
             if !FileManager.default.fileExists(atPath: dir_path.path) {
                 do {
                     try FileManager.default.createDirectory(atPath: dir_path.path, withIntermediateDirectories: true, attributes: nil)
@@ -93,6 +137,77 @@ final class PhotoPickerViewModal: ObservableObject {
                 startPoint+=1
                 name = "UserImage\(startPoint).jpg"
             }
+    }
+    
+    private func deleteOldImagesFile(oldFileIndex: Int = 0, folderName: String) {
+        let fileNameToDelete = "UserImage\(oldFileIndex).jpg"
+        var filePath = folderName
+
+        // Fine documents directory on device
+         let dirs : [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+
+        if dirs.count > 0 {
+            let dir = dirs[0] //documents directory
+            filePath = dir.appendingFormat("/" + folderName + "/" + fileNameToDelete)
+
+            print("Local path = \(filePath)")
+         
+        } else {
+            print("Could not find local directory to store file")
+            return
+        }
+
+
+        do {
+             let fileManager = FileManager.default
+            
+            // Check if file exists
+            if fileManager.fileExists(atPath: filePath) {
+                // Delete file
+                try fileManager.removeItem(atPath: filePath)
+            } else {
+                print("File does not exist")
+            }
+         
+        }
+        catch let error as NSError {
+            print("An error took place: \(error)")
+        }
         
+        
+    }
+    private func deleteOldImagesFolder(folderName: String)  {
+        var filePath = folderName
+
+        // Fine documents directory on device
+         let dirs : [String] = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.allDomainsMask, true)
+
+        if dirs.count > 0 {
+            let dir = dirs[0] //documents directory
+            filePath = dir.appendingFormat("/" + folderName )
+
+            print("Deleting Local path = \(filePath)")
+         
+        } else {
+            print("Could not find local directory to store file")
+            return
+        }
+
+
+        do {
+             let fileManager = FileManager.default
+            
+            // Check if file exists
+            if fileManager.fileExists(atPath: filePath) {
+                // Delete file
+                try fileManager.removeItem(atPath: filePath)
+            } else {
+                print("File does not exist")
+            }
+         
+        }
+        catch let error as NSError {
+            print("An error took place: \(error)")
+        }
     }
 }

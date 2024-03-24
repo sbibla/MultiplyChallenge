@@ -263,6 +263,7 @@ struct GameFile: View {
     private var startGameButton: some View {
         HStack(spacing: 16) {
             VStack {
+#if DEBUG
                 if !localBackgroundImage.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -278,6 +279,7 @@ struct GameFile: View {
                     .frame(maxWidth: .infinity,maxHeight: 55)
                     .background(.black)
                 }
+#endif
                 
                 
                 
