@@ -9,6 +9,12 @@ import SwiftUI
 import AudioToolbox
 import AVFoundation
 
+#warning("Improvements to follow")
+/*
+ After user chooses, show the old score animated flying upwards (so the user can see the last question)
+ At the end of the level a clearer message that the level ended and CTA "press xyz..."
+ beeps in last 5sec of bonus level
+ */
 struct BonusView: View {
     
 
@@ -147,6 +153,7 @@ struct BonusView: View {
                 timeRemaining -= 1
             } else {
                 if score > highScore {
+                    #warning("Refactor to use the userDataModelView")
                     highScore = score
                     writeHighScoreData(data: highScore, Key: "highScore")
                 }

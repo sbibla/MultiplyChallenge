@@ -32,6 +32,7 @@
 		6457E9112B8690C2005A1338 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6457E9102B8690C2005A1338 /* LoginView.swift */; };
 		6457E9132B86CFCA005A1338 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6457E9122B86CFCA005A1338 /* SettingsView.swift */; };
 		6457E9152B890989005A1338 /* Bigger.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6457E9142B890989005A1338 /* Bigger.jpeg */; };
+		6458225C2BB400A00051D5F8 /* UserDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6458225B2BB400A00051D5F8 /* UserDataViewModel.swift */; };
 		646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 646CCF1A2B8DB76200CBE526 /* Bonus.wav */; };
 		647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */; };
 		647996992B7EEA0500B38283 /* InitScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 647996982B7EEA0500B38283 /* InitScreen.swift */; };
@@ -72,6 +73,7 @@
 		6457E9102B8690C2005A1338 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		6457E9122B86CFCA005A1338 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6457E9142B890989005A1338 /* Bigger.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bigger.jpeg; sourceTree = "<group>"; };
+		6458225B2BB400A00051D5F8 /* UserDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataViewModel.swift; sourceTree = "<group>"; };
 		646CCF1A2B8DB76200CBE526 /* Bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Bonus.wav; sourceTree = "<group>"; };
 		647996932B7EEA0500B38283 /* MultiplyMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiplyMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		647996962B7EEA0500B38283 /* MultiplyChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplyChallengeApp.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				6457E9092B854A20005A1338 /* MyButtonModel.swift */,
 				64282DE62BAD58D0007208D0 /* PhotoPIckerViewModel.swift */,
+				6458225B2BB400A00051D5F8 /* UserDataViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				64282DE72BAD58D0007208D0 /* PhotoPIckerViewModel.swift in Sources */,
 				647996A72B7EFEDE00B38283 /* ImagePicker.swift in Sources */,
 				6457E9132B86CFCA005A1338 /* SettingsView.swift in Sources */,
+				6458225C2BB400A00051D5F8 /* UserDataViewModel.swift in Sources */,
 				647996A52B7EFE6F00B38283 /* GameFile.swift in Sources */,
 				647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */,
 				6457E9062B8528C9005A1338 /* BonusView.swift in Sources */,

@@ -77,6 +77,7 @@ struct GameFile: View {
     @State var WrongAnswer: URL? = nil
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var userData: UserDataViewModel
 
 
 
@@ -430,11 +431,11 @@ struct GameFile: View {
 //            announceLevelWinner()
 //            writeLevelFinishTime()
 
-            DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now()+4, execute: {
                 if advanceToNextLevel == true {
                     currentLevel += 1
+                    userData.writeUserLevel(level: currentLevel)
                 }
-                //                currentLevel += 1
                 currentEquation = "Choose an equation"
                 startGame()})
         }

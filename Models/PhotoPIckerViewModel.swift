@@ -24,7 +24,7 @@ final class PhotoPickerViewModal: ObservableObject {
     }
     
     init() {
-        
+//        deleteOldImagesFolder(folderName: "userBackgroundImages")
         _ = loadImagesFromLocalStorage(folderName: "userBackgroundImages")
     }
     private func setImage(from selection: PhotosPickerItem?) {

@@ -15,41 +15,40 @@ import AVFoundation
 struct InitScreen: View {
     @State private var isMultiPlayer = false
     @State var startGame = false
-    @State private var photosPickerItems: [PhotosPickerItem] = []
-    @State var backgroundImages: [UIImage] = []
+    @State var withLoginOption = false
     @State var emailAddress = ""
     @State var password = ""
-    @State var highScore = 0
     @State var soundOn = true
-    @State var withLoginOption = false
-    @State var userHasPickedImages = false
     @State var tmpImage = UIImage(named: "Loading.jpg")!
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
                                   endPoint: .bottomTrailing)
-    @State var userPickedImages = 0
     @StateObject private var PPviewModel = PhotoPickerViewModal()
+    @StateObject private var userModel = UserDataViewModel()
+    #warning("Consider adding @Env object so it can be used through the views https://medium.com/@mark.moeykens/swiftui-environmentobject-how-to-share-data-between-views-13f354011081#:~:text=You%20could%20pass%20your%20observable,object)%20to%20a%20parent%20view.")
   
     var body: some View {
         ZStack {
             VStack {
-                
-                HeaderView()
+//                SettingsView()
+                HeaderView(PPviewModelHeader: PPviewModel)
                 Image(uiImage: tmpImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .clipShape(Circle())
                 
-                PhotosPicker(selection: $PPviewModel.imageSelections, matching: .any(of: [.images, .screenshots, .panoramas, .bursts, .livePhotos])) {
-                    VStack {
-                        Text("Pick Many Image")
-                            .foregroundColor(.orange)
-#if DEBUG
-                        LoadedImagesView(selectedImages: PPviewModel.selectedImages)
-#endif
-                    }
-                }
-                
+//                PhotosPicker(selection: $PPviewModel.imageSelections,maxSelectionCount: 50, matching: .any(of: [.images, .screenshots, .panoramas, .bursts, .livePhotos])) {
+//                    VStack {
+//                        Text("Pick Many Image")
+//                            .foregroundColor(.orange)
+//#if DEBUG
+//                        LoadedImagesView(selectedImages: PPviewModel.selectedImages)
+//#endif
+//                    }
+//                }
+//                #if DEBUG
+//                                        LoadedImagesView(selectedImages: PPviewModel.selectedImages)
+//                #endif
                 LoginView(emailAddress: emailAddress, password: password)
                     .opacity(withLoginOption ? 1 : 0)
                 Spacer()
@@ -78,34 +77,22 @@ struct InitScreen: View {
                 }
                 .padding()
                 .fullScreenCover(isPresented: $startGame, content: {
-                    GameFile(localBackgroundImage: PPviewModel.selectedImages, highScore: highScore)
+                    GameFile(localBackgroundImage: PPviewModel.selectedImages, currentLevel: userModel.highestLevel, highScore: userModel.highScore)
 
                 })
                 .onAppear{
                     Task {
-                            loadUserData()
-                        #warning("Move to load of class that deals with images or initializer")
+//                            loadUserData()
+//                        #warning("Move to load of class that deals with images or initializer")
                     }
                 }
             }//.background(Color(UIColor.black)) //VStack
-        }
+            
+        }.environmentObject(UserDataViewModel())
     }
     
-    func loadUserData(){
-      
-        //load highscore
-        loadHighScoreData()
-    }
-    func loadHighScoreData(){
-        let savedScore = UserDefaults.standard.integer(forKey: "highScore")
-        if (savedScore == 0) {
-            highScore = 0
-            logManager.shared.logMessage("No saved highScore", .warning)
-        } else {
-            highScore = savedScore
-            logManager.shared.logMessage("Found high score value: \(savedScore)", .info)
-        }
-    }
+
+
     
 
     
