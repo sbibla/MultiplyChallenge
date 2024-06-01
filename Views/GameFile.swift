@@ -67,7 +67,7 @@ struct GameFile: View {
     @State private var testMode = false
     @State var advanceToNextLevel = false
     @State private var allTilesDisabled = false
-    @State private var isPresented = false
+    @State private var isBonusScreen = false
     @State var startBonusLevel = false
     @State var highScore: Int
     @State var CorrectAnswer: URL? = nil
@@ -103,8 +103,8 @@ struct GameFile: View {
                 showAnswerButtons, alignment: .bottom)
             .navigationBarHidden(true)
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
-            .fullScreenCover(isPresented: $isPresented, content: {
-                BonusView(isPresented: $isPresented, highScore: $highScore)
+            .fullScreenCover(isPresented: $isBonusScreen, content: {
+                BonusView(isPresented: $isBonusScreen, highScore: $highScore)
             })
         }
     }
@@ -128,7 +128,6 @@ struct GameFile: View {
                             .tag("\(col+4*row)")
                     }
                     .disabled(disableButton[col+4*row] || allTilesDisabled)
-#warning("Hide the background of the button when pressed (non-clear)")
                 }
                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
             }.ignoresSafeArea()
@@ -141,6 +140,7 @@ struct GameFile: View {
             .aspectRatio(contentMode: .fit)
             .aspectRatio(contentMode: .fit)
             .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            .blur(radius: disableButton.allSatisfy({$0}) ? 0 : 15)
     }
     
 //    private func initDictionary()    {
@@ -265,21 +265,21 @@ struct GameFile: View {
         HStack(spacing: 16) {
             VStack {
 #if DEBUG
-                if !localBackgroundImage.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(localBackgroundImage, id: \.self) {image in
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .cornerRadius(10)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity,maxHeight: 55)
-                    .background(.black)
-                }
+//                if !localBackgroundImage.isEmpty {
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        HStack {
+//                            ForEach(localBackgroundImage, id: \.self) {image in
+//                                Image(uiImage: image)
+//                                    .resizable()
+//                                    .scaledToFill()
+//                                    .frame(width: 50, height: 50)
+//                                    .cornerRadius(10)
+//                            }
+//                        }
+//                    }
+//                    .frame(maxWidth: .infinity,maxHeight: 55)
+//                    .background(.black)
+//                }
 #endif
                 
                 
@@ -292,6 +292,7 @@ struct GameFile: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity,maxHeight: .infinity)
                         .background(.black)
+                    
                 }
             }
         }
@@ -318,7 +319,8 @@ struct GameFile: View {
             .simultaneousGesture(TapGesture(count: 3).onEnded {
                 if(testMode) {
                     currentLevel += 1
-                    print("NextLevel pressed")
+                    
+                    logManager.shared.logMessage("NextLevel pressed", .debug)
                 }else {
                     presentationMode.wrappedValue.dismiss()
                 }
@@ -397,7 +399,7 @@ struct GameFile: View {
 
     }
     private func correctAnswer() {
-        print("Answered correctly")
+//        print("Answered correctly")
 //        playSounds("CorrectAnswer.wav")
         playSounds(CorrectAnswer!)
         showImage[currentButton].toggle()
@@ -407,7 +409,7 @@ struct GameFile: View {
         //All answers are correct
         if disableButton.allSatisfy({$0}) {
             levelComplete = true
-            print("Level completed with \(mistakesInLevel) mistakes")
+            logManager.shared.logMessage("Level completed with \(mistakesInLevel) mistakes",.debug)
             disalbeAnswerButtonsUntilNextQuestion = false
             if mistakesInLevel < 5 {
                 advanceToNextLevel = true
@@ -415,7 +417,7 @@ struct GameFile: View {
                 if (currentLevel % 3 == 0) {
                     playSounds(Bonus!)
 //                    startBonusLevel.toggle()
-                    isPresented.toggle()
+                    isBonusScreen.toggle()
                 } else {
                 
                     currentEquation = "Setting Level \(currentLevel+1)"
@@ -423,7 +425,7 @@ struct GameFile: View {
                 }
             }else {
                 advanceToNextLevel = false
-                print("Too many mistakes, repeat level")
+                logManager.shared.logMessage("Too many mistakes, repeat level", .debug)
                 currentEquation = "Repeat Level \(currentLevel)"
                 playSounds(RepeatLevel!)
             }

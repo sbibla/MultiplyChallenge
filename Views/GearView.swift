@@ -8,26 +8,20 @@
 import SwiftUI
 import PhotosUI
 
-struct SettingsView: View {
+struct GearView: View {
     @State private var photosPickerItems: [PhotosPickerItem] = []
     var body: some View {
-        ZStack {
+        HStack {
+            Spacer()            
             VStack {
-                HStack {
-                    Spacer()
-                    Image(systemName: "gear")
-                        .font(.system(size: 25))
-                        .overlay {
-                            PhotosPicker("O", selection: $photosPickerItems,maxSelectionCount: 10, selectionBehavior: .ordered, matching: .images)
-                                .frame(minWidth: 100, maxWidth: 100)
-                        }
-//                    Spacer()
-                }
+                Image(systemName: "gearshape.fill")
+                    .foregroundColor(Color(.label))
+                    .imageScale(.large)
+                    .frame(width: 44, height: 44)
                 Spacer()
-                
             }
-//            LoadedImagesView(selectedImages: [UIImage(named: "DefaultImage1.jpg")!, UIImage(named: "DefaultImage2.jpg")!])
         }
+        .padding()
     }
 }
 
@@ -51,6 +45,6 @@ struct LoadedImagesView: View {
 }
 
 #Preview {
-    SettingsView()
+    GearView()
 //        LoadedImagesView(selectedImages: [UIImage(named: "DefaultImage1.jpg")!, UIImage(named: "DefaultImage2.jpg")!, UIImage(named: "Loading.jpg")!, UIImage(named: "DefaultImage3.jpg")!, UIImage(named: "DefaultImage4.jpg")!,UIImage(named: "DefaultImage5.jpg")!, UIImage(named: "DefaultImage6.jpg")!,UIImage(named: "DefaultImage7.jpg")!, UIImage(named: "DefaultImage8.jpg")!, ])
 }

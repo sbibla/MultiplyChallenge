@@ -8,31 +8,38 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State var emailAddress = ""
-    @State var password = ""
+    
+    @StateObject var viewModel = LoginViewModel()
+    
     var body: some View {
-        Form {
-            TextField("Email Address", text: $emailAddress)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
-                .autocorrectionDisabled()                
-            SecureField("Password;", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                .autocorrectionDisabled()
-            Button {
-                //Attempt login
-                logManager.shared.logMessage("Login user \(emailAddress) pass \(password)", .debug)
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundColor(.pink)
+        ZStack {
+            Form {
+                TextField("Email Address", text: $viewModel.emailAddress)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled()
+                SecureField("Password;", text: $viewModel.password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled()
+                Button {
+                    //Attempt login
+                    viewModel.login()
+                    logManager.shared.logMessage("Login user \(viewModel.emailAddress) pass \(viewModel.password)", .debug)
+                } label: {
                     Text("Log In")
-                        .bold()
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .frame(width: 260, height: 50)
                         .foregroundColor(.white)
+                        .background(.pink)
+                        .cornerRadius(10)
+                    
                 }
-            }.disabled(emailAddress.isEmpty || password.isEmpty)
+            }/*.disabled(viewModel.emailAddress.isEmpty || viewModel.password.isEmpty)*/
+        }.alert(item: $viewModel.alertItem) { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
     }
 }
@@ -40,3 +47,5 @@ struct LoginView: View {
 #Preview {
     LoginView()
 }
+
+

@@ -16,33 +16,29 @@ struct HeaderView: View {
                 .foregroundColor(Color.pink)
                 .rotationEffect(Angle(degrees: 15))
             VStack {
-//                SettingsView()
-                HStack {
+                //                SettingsView()
+                HStack() {
                     PhotosPicker(selection: $PPviewModelHeader.imageSelections,maxSelectionCount: 50, matching: .any(of: [.images, .screenshots, .panoramas, .bursts, .livePhotos])) {
-//                        VStack {
-                            Spacer()
-                            Text("   ⚙️")
-                                .foregroundColor(.black)
-                                .font(.system(size: 25))
-                        Spacer()
-                        Spacer()
-    #if DEBUG
-//                            LoadedImagesView(selectedImages: PPviewModel.selectedImages)
-    #endif
-//                        }
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(Color(.white))
+                            .imageScale(.large)
+                            .frame(width: 64, height: 64)
                     }
                 }
+                .offset(x: UIScreen.main.bounds.width-230, y: 15 )
+
                 Text("Multiply Me")
                     .font(.system(size: 50))
                     .foregroundColor(Color.white)
                     .bold()
+                
                 Text("Multiplication puzzle game")
                     .font(.system(size: 30))
                     .foregroundColor(.white)
             }
-            .padding(.top, 30)
+            .padding(.top, 10)
         }
-        .frame(width: UIScreen.main.bounds.width*3, height: 300)
+        .frame(width: UIScreen.main.bounds.width*3, height: 320)
         .offset(y: -120)
     }
 }

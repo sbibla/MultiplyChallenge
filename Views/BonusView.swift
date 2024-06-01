@@ -9,7 +9,7 @@ import SwiftUI
 import AudioToolbox
 import AVFoundation
 
-#warning("Improvements to follow")
+//#warning("Bonus level Improvements to follow")
 /*
  After user chooses, show the old score animated flying upwards (so the user can see the last question)
  At the end of the level a clearer message that the level ended and CTA "press xyz..."
@@ -91,9 +91,7 @@ struct BonusView: View {
                                 }
                             }.disabled(isGameOver)
                         }
-//                                                Text(">\n<\n=")
-//                                                    .font(.system(size: 20))
-//                        Divider()
+
                         Text(answerLabel ?? "Touch the\nBigger")
                             .foregroundColor(.red)
                             .multilineTextAlignment(.center)
@@ -138,8 +136,12 @@ struct BonusView: View {
                     Text("Game Over! Score: \(score)")
                         .font(.title)
                     Text("Highest Score \(highScore)")
-                    Button("Return to Game") {
+                    Spacer()
+                    Button() {
                         isPresented.toggle()
+                    }label: {
+                        Text("Return to Game")
+                            .font(.title)
                     }
                 }
             }
@@ -153,7 +155,7 @@ struct BonusView: View {
                 timeRemaining -= 1
             } else {
                 if score > highScore {
-                    #warning("Refactor to use the userDataModelView")
+//                    #warning("Refactor to use the userDataModelView")
                     highScore = score
                     writeHighScoreData(data: highScore, Key: "highScore")
                 }
@@ -176,7 +178,11 @@ struct BonusView: View {
                 showBonusIntro = false
             }
         }
-        .overlay(showBonusIntro ? BonusIntroScreen : nil, alignment: .center )
+//        .fullScreenCover(item: $showBonusIntro, content: BonusIntroScreen)
+        .fullScreenCover(isPresented: $showBonusIntro, content: {
+            BonusIntroScreen
+        })
+//        .overlay(showBonusIntro ? BonusIntroScreen : nil )
     }
     
     private var BonusIntroScreen: some View {
@@ -186,11 +192,16 @@ struct BonusView: View {
                     timeRemaining = 60.0
                     showBonusIntro.toggle()                    
                 }label: {
-                    Text("Bonus Level\n Starts in\n\(Int(delayStartTimeRemaining))")
-                        .font(.system(size: 50, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity,maxHeight: .infinity)
-                        .background(.black)
+                    VStack {
+                        Text("Bonus Level\n Starts in\n\(Int(delayStartTimeRemaining))")
+                            .font(.system(size: 50, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity)
+                            .background(.black)
+                        Text("You have 1 minute to click on the largest multiplication answer")
+                            .font(.body)
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    }
                 }
             }
         }
@@ -250,7 +261,9 @@ struct BonusView: View {
             if score < 0 {
                 score = 0
             }
-            timeRemaining -= 10
+            if timeRemaining < 10 {timeRemaining = 0} else {
+                timeRemaining -= 10
+            }
             resultDisplayTime = 1.2
         }
         generateEquations()

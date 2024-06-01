@@ -7,24 +7,24 @@
 
 import Foundation
 final class UserDataViewModel: ObservableObject {
-    @Published var highScore = 0
-    @Published var highestLevel = 1
-    
+//    @Published var highScore = 0
+//    @Published var highestLevel = 1
+    @Published var user = User()
     init() {
         if ( loadLastLevel() > 3 ){
             loadHighScoreData()
         }else {
-            logManager.shared.logMessage("Highest level <3, No need to search for bonus level highscore", .debug)
+            logManager.shared.logMessage("Highest level <3, No need to search for bonus level high score", .debug)
         }
         
     }
     private func loadHighScoreData(){
         let savedScore = UserDefaults.standard.integer(forKey: "highScore")
         if (savedScore == 0) {
-            highScore = 0
+            user.highScore = 0
             logManager.shared.logMessage("No saved highScore", .warning)
         } else {
-            highScore = savedScore
+            user.highScore = savedScore
             logManager.shared.logMessage("Found high score value: \(savedScore)", .info)
         }
     }
@@ -32,15 +32,15 @@ final class UserDataViewModel: ObservableObject {
     private func loadLastLevel()->Int {
         let savedHighestLevel = UserDefaults.standard.integer(forKey: "highestLevel")
         if (savedHighestLevel == 0) {
-            highestLevel = 1
+            user.highestLevel = 1
             logManager.shared.logMessage("No recorded level, Running for the first time", .warning)
             writeUserData(data: 1, Key: "highestLevel")
             //record first time
             return -1
         } else {
-            highestLevel = savedHighestLevel
-            logManager.shared.logMessage("Found highest level value: \(highestLevel)", .info)
-            return highestLevel
+            user.highestLevel = savedHighestLevel
+            logManager.shared.logMessage("Found highest level value: \(user.highestLevel)", .info)
+            return user.highestLevel
         }
     }
     func writeUserLevel(level: Int) {
