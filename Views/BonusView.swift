@@ -148,7 +148,6 @@ struct BonusView: View {
         }
         .onAppear {
             generateEquations()
-//            loadHighScoreData()
         }
         .onReceive(timer) { _ in
             if timeRemaining > 0 {
@@ -174,15 +173,12 @@ struct BonusView: View {
             if delayStartTimeRemaining > 1 {
                 delayStartTimeRemaining -= 1
             }else {
-//                timeRemaining = 60
                 showBonusIntro = false
             }
         }
-//        .fullScreenCover(item: $showBonusIntro, content: BonusIntroScreen)
         .fullScreenCover(isPresented: $showBonusIntro, content: {
             BonusIntroScreen
         })
-//        .overlay(showBonusIntro ? BonusIntroScreen : nil )
     }
     
     private var BonusIntroScreen: some View {
@@ -198,9 +194,10 @@ struct BonusView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,maxHeight: .infinity)
                             .background(.black)
-                        Text("You have 1 minute to click on the largest multiplication answer")
-                            .font(.body)
+                        Text("You have 1 minute to hit the largest multiplication answer")
+                            .font(.system(size: 25))
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            .padding(.bottom)
                     }
                 }
             }
@@ -210,19 +207,9 @@ struct BonusView: View {
         UserDefaults.standard.set(data, forKey: Key)
         logManager.shared.logMessage("High-score \(data.description) saved locally", .debug)
     }
-//    func loadHighScoreData(){
-//        let savedScore = UserDefaults.standard.integer(forKey: "highScore")
-//        if (savedScore == 0) {
-//            highScore = 0
-//            logManager.shared.logMessage("No saved highScore", .warning)
-//        } else {
-//            highScore = savedScore
-//            logManager.shared.logMessage("Found high score value: \(savedScore)", .info)
-//        }
-//    }
+
     func generateEquations() {
         // Generate random equations with difficulty levels
-        // ... replace with your logic for generating equations
         repeat {
             literal1 = Int.random(in:1 ... 12)
             literal2 = Int.random(in:1 ... 12)
@@ -252,19 +239,20 @@ struct BonusView: View {
         if number == answer {
             score += 1
             answerLabel = "👍🏼"
-            playSounds("CorrectAnswer.wav")
-            resultDisplayTime = 1.2
+            playSounds("CorrectAnswer x 2.wav")
+            resultDisplayTime = 0.5
         } else {
-            score -= 1
             answerLabel = "👎🏻"
-            playSounds("WrongAnswer.aiff")
-            if score < 0 {
+            playSounds("WrongAnswer x 2.wav")
+            if score < 1 {
                 score = 0
+            } else {
+                score -= 1
             }
-            if timeRemaining < 10 {timeRemaining = 0} else {
-                timeRemaining -= 10
+            if timeRemaining < 5 {timeRemaining = 0} else {
+                timeRemaining -= 5
             }
-            resultDisplayTime = 1.2
+            resultDisplayTime = 0.5
         }
         generateEquations()
         //        timeRemaining = 60.0
@@ -286,32 +274,4 @@ struct BonusView: View {
     //    MultiplicationComparisonView()
 }
 
-struct BonusView2: View {
-    var body: some View {
-        ZStack {
-            Image("spaceImage")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            HStack {
-                
-                Image("Bigger")
-                    .resizable()
-                    .frame(width: 150, height: 100)
-                    .aspectRatio(contentMode: .fit)
-                    .clipShape(Capsule(style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
-//                    .mask(
-//                                   LinearGradient(gradient: Gradient(colors: [Color.black, Color.black, Color.black, Color.black.opacity(0)]), startPoint: .top, endPoint: .bottom)
-//                               )
-                
-                Image("Bigger")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-            }
-        }
-        
-    }
-}
 

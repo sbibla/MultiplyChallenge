@@ -70,18 +70,32 @@ struct GameFile: View {
     @State private var isBonusScreen = false
     @State var startBonusLevel = false
     @State var highScore: Int
-    @State var CorrectAnswer: URL? = nil
+    @State var randOkSound: URL? = nil
+    @State var randWrongSound: URL? = nil
+    @State var CorrectAnswer1: URL? = nil
+    @State var CorrectAnswer2: URL? = nil
+    @State var CorrectAnswer3: URL? = nil
+    @State var CorrectAnswer4: URL? = nil
+    @State var CorrectAnswer5: URL? = nil
+    @State var CorrectAnswer6: URL? = nil
+    @State var CorrectAnswer7: URL? = nil
+    @State var CorrectAnswer8: URL? = nil
+    @State var CorrectAnswer9: URL? = nil
+    
     @State var NextLevel: URL? = nil
     @State var RepeatLevel: URL? = nil
     @State var Bonus: URL? = nil
     @State var WrongAnswer: URL? = nil
+    @State var WrongAnswer2: URL? = nil
+    @State var WrongAnswer3: URL? = nil
+    @State var WrongAnswer4: URL? = nil
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userData: UserDataViewModel
 
 
 
-    let encouragementTextArray = ["👋🏼 כל הכבוד 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
+    let encouragementTextArray = ["🙏🏼 Believe 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
 //    @EnvironmentObject var userData: UserData
 
     var body: some View {
@@ -151,8 +165,32 @@ struct GameFile: View {
 //
     func initSounds(){
         logManager.shared.logMessage("Initializing sounds", .debug)
-        CorrectAnswer = Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil)
-        if CorrectAnswer == nil { fatalError("Unable to find CorrrectAnswer.wav in bundle") }
+        CorrectAnswer1 = Bundle.main.url(forResource: "CorrectAnswer-1.wav", withExtension: nil)
+        if CorrectAnswer1 == nil { fatalError("Unable to find CorrrectAnswer.wav in bundle") }
+        
+        CorrectAnswer2 = Bundle.main.url(forResource: "CorrectAnswer-2.wav", withExtension: nil)
+        if CorrectAnswer2 == nil { fatalError("Unable to find CorrrectAnswer2.wav in bundle") }
+        
+        CorrectAnswer3 = Bundle.main.url(forResource: "CorrectAnswer-3.wav", withExtension: nil)
+        if CorrectAnswer3 == nil { fatalError("Unable to find CorrrectAnswer3.wav in bundle") }
+        
+        CorrectAnswer4 = Bundle.main.url(forResource: "CorrectAnswer-4.wav", withExtension: nil)
+        if CorrectAnswer4 == nil { fatalError("Unable to find CorrrectAnswer4.wav in bundle") }
+        
+        CorrectAnswer5 = Bundle.main.url(forResource: "CorrectAnswer-5.wav", withExtension: nil)
+        if CorrectAnswer5 == nil { fatalError("Unable to find CorrrectAnswer5.wav in bundle") }
+        
+        CorrectAnswer6 = Bundle.main.url(forResource: "CorrectAnswer-6.wav", withExtension: nil)
+        if CorrectAnswer6 == nil { fatalError("Unable to find CorrrectAnswer6.wav in bundle") }
+        
+        CorrectAnswer7 = Bundle.main.url(forResource: "CorrectAnswer-7.wav", withExtension: nil)
+        if CorrectAnswer7 == nil { fatalError("Unable to find CorrrectAnswer7.wav in bundle") }
+        
+        CorrectAnswer8 = Bundle.main.url(forResource: "CorrectAnswer-8.wav", withExtension: nil)
+        if CorrectAnswer8 == nil { fatalError("Unable to find CorrrectAnswer8.wav in bundle") }
+        
+        CorrectAnswer9 = Bundle.main.url(forResource: "CorrectAnswer-9.wav", withExtension: nil)
+        if CorrectAnswer9 == nil { fatalError("Unable to find CorrrectAnswer9.wav in bundle") }
         
         NextLevel = Bundle.main.url(forResource: "NextLevel.aiff", withExtension: nil)
         if NextLevel == nil {    fatalError("Unable to find NextLevel.aiff in bundle") }
@@ -165,6 +203,18 @@ struct GameFile: View {
         
         WrongAnswer = Bundle.main.url(forResource: "WrongAnswer.aiff", withExtension: nil)
         if WrongAnswer == nil { fatalError("Unable to find WrongAnswer.aiff in bundle") }
+        
+        WrongAnswer2 = Bundle.main.url(forResource: "WrongAnswer-2.wav", withExtension: nil)
+        if WrongAnswer2 == nil { fatalError("Unable to find WrongAnswer2 in bundle") }
+
+        WrongAnswer3 = Bundle.main.url(forResource: "WrongAnswer-3.wav", withExtension: nil)
+        if WrongAnswer3 == nil { fatalError("Unable to find WrongAnswer3 in bundle") }
+
+        WrongAnswer4 = Bundle.main.url(forResource: "WrongAnswer-4.wav", withExtension: nil)
+        if WrongAnswer4 == nil { fatalError("Unable to find WrongAnswer4 in bundle") }
+
+        
+        
     }
     
     func playSounds(_ soundURL: URL){
@@ -395,13 +445,41 @@ struct GameFile: View {
     }
     private func wrongAnswer() {
         mistakesInLevel += 1
-        playSounds(WrongAnswer!)
+        randomizeWrongSound()
+        playSounds(randWrongSound!)
 
     }
+    
+    private func randomizeOkSound() {
+        switch Int.random(in:1 ... 9){
+        case 1: randOkSound = CorrectAnswer1
+        case 2: randOkSound = CorrectAnswer2
+        case 3: randOkSound = CorrectAnswer3
+        case 4: randOkSound = CorrectAnswer4
+        case 5: randOkSound = CorrectAnswer5
+        case 6: randOkSound = CorrectAnswer5
+        case 7: randOkSound = CorrectAnswer5
+        case 8: randOkSound = CorrectAnswer5
+        case 9: randOkSound = CorrectAnswer5            
+        default:
+            randOkSound = CorrectAnswer1
+        }
+    }
+    
+    private func randomizeWrongSound() {
+        switch Int.random(in:1 ... 4){
+        case 1: randWrongSound = WrongAnswer
+        case 2: randWrongSound = WrongAnswer2
+        case 3: randWrongSound = WrongAnswer3
+        case 4: randWrongSound = WrongAnswer4
+        default:
+            randWrongSound = WrongAnswer
+        }
+    }
+    
     private func correctAnswer() {
-//        print("Answered correctly")
-//        playSounds("CorrectAnswer.wav")
-        playSounds(CorrectAnswer!)
+        randomizeOkSound()
+        playSounds(randOkSound!)
         showImage[currentButton].toggle()
         disableButton[currentButton].toggle()
         disalbeAnswerButtonsUntilNextQuestion.toggle()

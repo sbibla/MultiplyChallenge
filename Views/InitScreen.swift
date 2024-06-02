@@ -42,11 +42,11 @@ struct InitScreen: View {
                 HeaderView(PPviewModelHeader: PPviewModel)
                 ImageInCircle(circleImage: tmpImage)
                     .gesture(tapGesture)
-#if DEBUG
+//#if DEBUG
                 if(showImagePreview) {
                     LoadedImagesView(selectedImages: PPviewModel.selectedImages)
                 }
-#endif
+//#endif
                 
                 LoginView()
                     .opacity(withLoginOption ? 1 : 0)
@@ -86,35 +86,7 @@ struct InitScreen: View {
             }//.background(Color(UIColor.black)) //VStack
             
         }.environmentObject(UserDataViewModel())
-    }
-    
-    
-    
-    
-    
-    
-    //    func playSounds(_ soundFileName : String) {
-    //
-    //        if soundOn == false {             // Have a toggle to mute sound in app
-    //            logManager.shared.logMessage("All sounds are muted")
-    //            return
-    //        }
-    //        mySoundPtr = Sounds(CorrectAnswer: Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil), NextLevel: Bundle.main.url(forResource: "NextLevel.aiff", withExtension: nil), WrongAnswer:  Bundle.main.url(forResource: "WrongAnswer.aiff", withExtension: nil))
-    //Init all sounds once
-    
-    //        guard let bla.CorrectAnswer = Bundle.main.url(forResource: "CorrectAnswer.wav", withExtension: nil) else {
-    //            fatalError("Unable to find \(soundFileName) in bundle")
-    //        }
-    
-    //
-    //        do {
-    //            audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
-    //        } catch {
-    //            logManager.shared.logMessage(error.localizedDescription, .warning)
-    //        }
-    //        audioPlayer.play()
-    //    }
-    
+    }    
 }
 
 #Preview {
