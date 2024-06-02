@@ -456,11 +456,11 @@ struct GameFile: View {
         case 2: randOkSound = CorrectAnswer2
         case 3: randOkSound = CorrectAnswer3
         case 4: randOkSound = CorrectAnswer4
-        case 5: randOkSound = CorrectAnswer5
-        case 6: randOkSound = CorrectAnswer5
-        case 7: randOkSound = CorrectAnswer5
-        case 8: randOkSound = CorrectAnswer5
-        case 9: randOkSound = CorrectAnswer5            
+        case 5: randOkSound = CorrectAnswer6
+        case 6: randOkSound = CorrectAnswer7
+        case 7: randOkSound = CorrectAnswer8
+        case 8: randOkSound = CorrectAnswer9
+        case 9: randOkSound = CorrectAnswer9
         default:
             randOkSound = CorrectAnswer1
         }
@@ -503,7 +503,7 @@ struct GameFile: View {
                 }
             }else {
                 advanceToNextLevel = false
-                logManager.shared.logMessage("Too many mistakes, repeat level", .debug)
+                logManager.shared.logMessage("Too many mistakes (\(mistakesInLevel)), repeat level", .debug)
                 currentEquation = "Repeat Level \(currentLevel)"
                 playSounds(RepeatLevel!)
             }
