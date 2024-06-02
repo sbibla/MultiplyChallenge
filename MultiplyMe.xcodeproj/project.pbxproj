@@ -47,6 +47,7 @@
 		64627FE52C0C0AF500CBF657 /* WrongAnswer-2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE22C0C0AF400CBF657 /* WrongAnswer-2.wav */; };
 		64627FE62C0C0AF500CBF657 /* WrongAnswer-3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE32C0C0AF400CBF657 /* WrongAnswer-3.wav */; };
 		64627FE72C0C0AF500CBF657 /* WrongAnswer-4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */; };
+		64627FE92C0D165100CBF657 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE82C0D165100CBF657 /* index.html */; };
 		646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 646CCF1A2B8DB76200CBE526 /* Bonus.wav */; };
 		6474D0402BE35AF00013779E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D03F2BE35AF00013779E /* String+Ext.swift */; };
 		6474D0422BE35BFA0013779E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D0412BE35BFA0013779E /* LoginViewModel.swift */; };
@@ -109,6 +110,7 @@
 		64627FE22C0C0AF400CBF657 /* WrongAnswer-2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-2.wav"; sourceTree = "<group>"; };
 		64627FE32C0C0AF400CBF657 /* WrongAnswer-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-3.wav"; sourceTree = "<group>"; };
 		64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-4.wav"; sourceTree = "<group>"; };
+		64627FE82C0D165100CBF657 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		646CCF1A2B8DB76200CBE526 /* Bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Bonus.wav; sourceTree = "<group>"; };
 		6474D03F2BE35AF00013779E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		6474D0412BE35BFA0013779E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 		6479968A2B7EEA0500B38283 = {
 			isa = PBXGroup;
 			children = (
+				64627FE82C0D165100CBF657 /* index.html */,
 				6474D0432BE36ED20013779E /* Utilities */,
 				64560B3B2BC5B3E8009F56F6 /* MultiplyMe-Info.plist */,
 				6457E90B2B854AE9005A1338 /* Models */,
@@ -348,6 +351,7 @@
 				64627FE62C0C0AF500CBF657 /* WrongAnswer-3.wav in Resources */,
 				64627FD92C0BFBA700CBF657 /* CorrectAnswer-2.wav in Resources */,
 				6457E8FD2B8433D5005A1338 /* DefaultImage10.jpg in Resources */,
+				64627FE92C0D165100CBF657 /* index.html in Resources */,
 				646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */,
 				6457E8E02B83F17A005A1338 /* launchScreen.jpg in Resources */,
 				647996C52B817E9700B38283 /* WrongAnswer.aiff in Resources */,
