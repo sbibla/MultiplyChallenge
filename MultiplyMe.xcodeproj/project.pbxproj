@@ -48,6 +48,7 @@
 		64627FE62C0C0AF500CBF657 /* WrongAnswer-3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE32C0C0AF400CBF657 /* WrongAnswer-3.wav */; };
 		64627FE72C0C0AF500CBF657 /* WrongAnswer-4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */; };
 		64627FE92C0D165100CBF657 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE82C0D165100CBF657 /* index.html */; };
+		64627FEB2C0D479000CBF657 /* iPhoneScreenShot.png in Resources */ = {isa = PBXBuildFile; fileRef = 64627FEA2C0D479000CBF657 /* iPhoneScreenShot.png */; };
 		646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 646CCF1A2B8DB76200CBE526 /* Bonus.wav */; };
 		6474D0402BE35AF00013779E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D03F2BE35AF00013779E /* String+Ext.swift */; };
 		6474D0422BE35BFA0013779E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D0412BE35BFA0013779E /* LoginViewModel.swift */; };
@@ -111,6 +112,7 @@
 		64627FE32C0C0AF400CBF657 /* WrongAnswer-3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-3.wav"; sourceTree = "<group>"; };
 		64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-4.wav"; sourceTree = "<group>"; };
 		64627FE82C0D165100CBF657 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		64627FEA2C0D479000CBF657 /* iPhoneScreenShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhoneScreenShot.png; sourceTree = "<group>"; };
 		646CCF1A2B8DB76200CBE526 /* Bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Bonus.wav; sourceTree = "<group>"; };
 		6474D03F2BE35AF00013779E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		6474D0412BE35BFA0013779E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				64627FE82C0D165100CBF657 /* index.html */,
+				64627FEA2C0D479000CBF657 /* iPhoneScreenShot.png */,
 				6474D0432BE36ED20013779E /* Utilities */,
 				64560B3B2BC5B3E8009F56F6 /* MultiplyMe-Info.plist */,
 				6457E90B2B854AE9005A1338 /* Models */,
@@ -364,6 +367,7 @@
 				6457E8E22B83F57C005A1338 /* Launch Screen.storyboard in Resources */,
 				6457E9012B8433D5005A1338 /* DefaultImage12.jpg in Resources */,
 				6457E8FB2B8433D5005A1338 /* DefaultImage7.jpg in Resources */,
+				64627FEB2C0D479000CBF657 /* iPhoneScreenShot.png in Resources */,
 				64627FD72C0BFBA700CBF657 /* CorrectAnswer-5.wav in Resources */,
 				6457E8F92B8433D5005A1338 /* DefaultImage8.jpg in Resources */,
 				6457E8FE2B8433D5005A1338 /* DefaultImage6.jpg in Resources */,

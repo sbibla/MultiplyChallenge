@@ -3,138 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Puzzle Game</title>
+    <title>Multiply x Me</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             padding: 0;
+            text-align: center;
+            background-color: #f0f0f0;
         }
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 10px;
-            width: 80%;
-            max-width: 600px;
+        .container {
+            max-width: 800px;
             margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .tile {
-            position: relative;
-            width: 100%;
-            padding-top: 100%;
-            background-color: #ccc;
-            cursor: pointer;
-            overflow: hidden;
+        h1 {
+            color: #333;
         }
-        .tile img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
+        h2 {
+            color: #444;
         }
-        .tile.correct img {
-            display: block;
-        }
-        .tile .equation {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .tagline {
+            color: #555;
             font-size: 1.2em;
+            margin-top: -10px;
         }
-        .options {
-            display: none;
+        .game-screenshot {
+            margin: 20px 0;
+        }
+        p {
+            color: #666;
+        }
+        .settings-note {
             margin-top: 20px;
-        }
-        .options button {
-            margin: 5px;
-            padding: 10px;
+            color: #666;
             font-size: 1em;
         }
     </style>
 </head>
 <body>
-    <h1>Math Puzzle Game</h1>
-    <div class="game-board" id="gameBoard">
-        <!-- Tiles will be generated here by JavaScript -->
+    <div class="container">
+        <h1>Multiply x Me</h1>
+        <p class="tagline">Unveil the Picture, One Tile at a Time!</p>
+        <p>Welcome to Multiply x Me! This game consists of 16 tiles, each containing a multiplication equation. Your goal is to solve the equations and uncover the full picture hidden behind the tiles.</p>
+        
+        <h2>How to Play</h2>
+        <p>Each tile presents a multiplication equation with three possible answers. Click on the correct answer to solve the equation. If you solve it correctly, the tile will reveal a portion of the hidden picture. Continue solving the equations until you uncover the entire picture.</p>
+        
+        <h2>Game Screenshot</h2>
+        <div class="game-screenshot">
+            <img src="iPhoneScreenShot.png" alt="Game Screenshot" style="max-width: 100%; height: auto;">
+        </div>
+        
+        <p class="settings-note">Background images can be chosen in the settings.</p>
+        <p class="settings-note">Bonus level will appear after the completion of every 3 levels.</p>
     </div>
-    <div class="options" id="options">
-        <div id="equation"></div>
-        <button onclick="checkAnswer(0)">Option 1</button>
-        <button onclick="checkAnswer(1)">Option 2</button>
-        <button onclick="checkAnswer(2)">Option 3</button>
-    </div>
-    <script>
-        const equations = [
-            { question: "5 + 3", answers: [8, 9, 7], correct: 0 },
-            { question: "7 - 2", answers: [5, 4, 6], correct: 0 },
-            { question: "6 * 2", answers: [12, 11, 13], correct: 0 },
-            { question: "9 / 3", answers: [3, 4, 2], correct: 0 },
-            { question: "4 + 4", answers: [8, 9, 7], correct: 0 },
-            { question: "10 - 5", answers: [5, 4, 6], correct: 0 },
-            { question: "3 * 3", answers: [9, 8, 10], correct: 0 },
-            { question: "8 / 4", answers: [2, 3, 4], correct: 0 },
-            { question: "2 + 6", answers: [8, 7, 9], correct: 0 },
-            { question: "5 - 1", answers: [4, 5, 3], correct: 0 },
-            { question: "7 * 1", answers: [7, 8, 6], correct: 0 },
-            { question: "6 / 2", answers: [3, 4, 2], correct: 0 },
-            { question: "3 + 4", answers: [7, 6, 8], correct: 0 },
-            { question: "9 - 6", answers: [3, 4, 2], correct: 0 },
-            { question: "2 * 5", answers: [10, 9, 11], correct: 0 },
-            { question: "8 / 2", answers: [4, 3, 5], correct: 0 },
-        ];
-
-        let currentTile = null;
-
-        function generateTiles() {
-            const gameBoard = document.getElementById('gameBoard');
-            equations.forEach((equation, index) => {
-                const tile = document.createElement('div');
-                tile.classList.add('tile');
-                tile.dataset.index = index;
-
-                const img = document.createElement('img');
-                img.src = `images/picture-part${index + 1}.jpg`;
-                tile.appendChild(img);
-
-                const equationDiv = document.createElement('div');
-                equationDiv.classList.add('equation');
-                equationDiv.textContent = equation.question;
-                tile.appendChild(equationDiv);
-
-                tile.addEventListener('click', () => showOptions(index));
-                gameBoard.appendChild(tile);
-            });
-        }
-
-        function showOptions(index) {
-            currentTile = index;
-            const optionsDiv = document.getElementById('options');
-            const equationDiv = document.getElementById('equation');
-            equationDiv.textContent = equations[index].question;
-
-            const buttons = optionsDiv.querySelectorAll('button');
-            buttons.forEach((button, btnIndex) => {
-                button.textContent = equations[index].answers[btnIndex];
-            });
-
-            optionsDiv.style.display = 'block';
-        }
-
-        function checkAnswer(answerIndex) {
-            if (equations[currentTile].correct === answerIndex) {
-                const tile = document.querySelector(`.tile[data-index="${currentTile}"]`);
-                tile.classList.add('correct');
-            }
-            document.getElementById('options').style.display = 'none';
-        }
-
-        generateTiles();
-    </script>
 </body>
 </html>
 
