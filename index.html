@@ -6,7 +6,7 @@
     <title>Multiply x Me</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             text-align: center;
@@ -17,24 +17,35 @@
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            animation: fadeIn 1s ease-in-out;
         }
         h1 {
-            color: #333;
+            color: #2c3e50;
+            animation: slideIn 1s ease-out;
         }
         h2 {
-            color: #444;
+            color: #34495e;
+            margin-top: 30px;
         }
         .tagline {
             color: #555;
             font-size: 1.2em;
             margin-top: -10px;
+            animation: fadeIn 2s ease-in-out;
         }
         .game-screenshot {
             margin: 20px 0;
+            animation: zoomIn 1s ease-in-out;
+        }
+        .game-screenshot img {
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         p {
             color: #666;
+            line-height: 1.6;
         }
         .settings-note {
             margin-top: 20px;
@@ -43,8 +54,27 @@
         }
         .support-note {
             margin-top: 20px;
-            color: #660;
+            color: #666;
             font-size: 0.9em;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -64,6 +94,7 @@
         
         <p class="settings-note">Background images can be chosen in the settings.</p>
         <p class="settings-note">Bonus level will appear after the completion of every 3 levels.</p>
+
         <p class="support-note">For any support requests or questions, please contact <a href="mailto:ssssemek@gmail.com">ssssemek@gmail.com</a></p>
     </div>
 </body>
