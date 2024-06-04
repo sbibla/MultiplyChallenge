@@ -20,7 +20,8 @@ struct InitScreen: View {
     @State var password = ""
     @State var soundOn = true
     @State var tmpImage = UIImage(named: "Loading.jpg")!
-    @State var showImagePreview = false
+    //Setting to true for MVP until setting screen is ready
+    @State var showImagePreview = true
     @State private var showSettings = false
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
