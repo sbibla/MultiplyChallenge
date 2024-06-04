@@ -17,21 +17,21 @@ import AVFoundation
 
 struct GameFile: View {
     @State var localBackgroundImage: [UIImage]
-//    init(img: [UIImage]) {
-//        for myImg in img {
-//            self.localBackgroundImage.append(myImg)
-//        }
-//        startGame()
-//    }
-//    init(localBackgroundImage: [UIImage?] = [nil]){
-//        _localBackgroundImage = State(initialValue: localBackgroundImage)
-//        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
-//    }
+    //    init(img: [UIImage]) {
+    //        for myImg in img {
+    //            self.localBackgroundImage.append(myImg)
+    //        }
+    //        startGame()
+    //    }
+    //    init(localBackgroundImage: [UIImage?] = [nil]){
+    //        _localBackgroundImage = State(initialValue: localBackgroundImage)
+    //        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
+    //    }
     
     @State var audioPlayer: AVAudioPlayer!
     @State var soundsMuted = false
-
-  
+    
+    
     @State private var showImage = [false, false, false, false,
                                     false, false, false, false,
                                     false, false, false, false,
@@ -47,7 +47,7 @@ struct GameFile: View {
                                      "3+1=?", "3+2=?", "3+3=?", "3+4=?",
                                      "4+1=?", "4+2=?", "4+3=?", "4+4=?"]
     
-//    @State var initmathDictionary: [String] = []
+    //    @State var initmathDictionary: [String] = []
     
     @State private var pmathDictionary: [String: (Int, Int, Int, Int)] = [:]
     @State var currentEquation = "Level 1"
@@ -92,12 +92,12 @@ struct GameFile: View {
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userData: UserDataViewModel
-
-
-
+    
+    
+    
     let encouragementTextArray = ["🙏🏼 Believe 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
-//    @EnvironmentObject var userData: UserData
-
+    //    @EnvironmentObject var userData: UserData
+    
     var body: some View {
         ZStack {
             BackgroundPuzzleImage
@@ -120,6 +120,10 @@ struct GameFile: View {
             .fullScreenCover(isPresented: $isBonusScreen, content: {
                 BonusView(isPresented: $isBonusScreen, highScore: $highScore)
             })
+            
+        }
+        .onAppear{
+            startGame()
         }
     }
     
@@ -157,12 +161,12 @@ struct GameFile: View {
             .blur(radius: disableButton.allSatisfy({$0}) ? 0 : 15)
     }
     
-//    private func initDictionary()    {
-//        for num in (0..<16) {
-//            pmathDictionary[initmathDictionary[num]] = (-1,-1,-1,-1)
-//        }
-//    }
-//
+    //    private func initDictionary()    {
+    //        for num in (0..<16) {
+    //            pmathDictionary[initmathDictionary[num]] = (-1,-1,-1,-1)
+    //        }
+    //    }
+    //
     func initSounds(){
         logManager.shared.logMessage("Initializing sounds", .debug)
         CorrectAnswer1 = Bundle.main.url(forResource: "CorrectAnswer-1.wav", withExtension: nil)
@@ -206,13 +210,13 @@ struct GameFile: View {
         
         WrongAnswer2 = Bundle.main.url(forResource: "WrongAnswer-2.wav", withExtension: nil)
         if WrongAnswer2 == nil { fatalError("Unable to find WrongAnswer2 in bundle") }
-
+        
         WrongAnswer3 = Bundle.main.url(forResource: "WrongAnswer-3.wav", withExtension: nil)
         if WrongAnswer3 == nil { fatalError("Unable to find WrongAnswer3 in bundle") }
-
+        
         WrongAnswer4 = Bundle.main.url(forResource: "WrongAnswer-4.wav", withExtension: nil)
         if WrongAnswer4 == nil { fatalError("Unable to find WrongAnswer4 in bundle") }
-
+        
         
         
     }
@@ -235,7 +239,7 @@ struct GameFile: View {
             guard let soundURL = Bundle.main.url(forResource: soundFileName, withExtension: nil) else {
                 fatalError("Unable to find \(soundFileName) in bundle")
             }
-
+            
             do {
                 audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             } catch {
@@ -252,10 +256,10 @@ struct GameFile: View {
         pmathDictionary.removeAll()
         logManager.shared.logMessage("Starting new game, pmathSize:\(pmathDictionary.count)", .debug)
         
-//        building dictionary until reaches 16 questions. Looping to remove duplicate keys
+        //        building dictionary until reaches 16 questions. Looping to remove duplicate keys
         while pmathDictionary.count < 16 {
             (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
-                logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
+            logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
             
             if (pmathDictionary.updateValue((resultOne, resultTwo, resultThree, resultLocation), forKey: equation) != nil) {
                 logManager.shared.logMessage("value \(equation) already exists", .debug)
@@ -281,9 +285,9 @@ struct GameFile: View {
             soundsInitialized = true
         }
         
-       
-            for eq in pmathDictionary {
-                logManager.shared.logMessage("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)", .debug)
+        
+        for eq in pmathDictionary {
+            logManager.shared.logMessage("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)", .debug)
         }
         logManager.shared.logMessage("Starting game with \(pmathDictionary.count) questions in each level \n Current level \(currentLevel   )", .info)
     }
@@ -298,11 +302,11 @@ struct GameFile: View {
             if keyNumber > 15 {
                 perror("Too many elements in dictionary \(pmathDictionary.count)")
                 return}
-
-//            initmathDictionary[keyNumber] = eq.key
+            
+            //            initmathDictionary[keyNumber] = eq.key
             initmathDictionary.append(eq.key)
             keyNumber+=1
-//            #warning("Hardcoded keyNumber will cause index out of range")
+            //            #warning("Hardcoded keyNumber will cause index out of range")
         }
     }
     func populateAnswers(){
@@ -314,26 +318,6 @@ struct GameFile: View {
     private var startGameButton: some View {
         HStack(spacing: 16) {
             VStack {
-#if DEBUG
-//                if !localBackgroundImage.isEmpty {
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        HStack {
-//                            ForEach(localBackgroundImage, id: \.self) {image in
-//                                Image(uiImage: image)
-//                                    .resizable()
-//                                    .scaledToFill()
-//                                    .frame(width: 50, height: 50)
-//                                    .cornerRadius(10)
-//                            }
-//                        }
-//                    }
-//                    .frame(maxWidth: .infinity,maxHeight: 55)
-//                    .background(.black)
-//                }
-#endif
-                
-                
-                
                 Button {
                     startGame()
                 }label: {
@@ -347,7 +331,7 @@ struct GameFile: View {
             }
         }
     }
-                   
+    
     private var showAnswerButtons: some View {
         VStack {
             Button {
@@ -376,7 +360,7 @@ struct GameFile: View {
                 }
             })
             .buttonStyle(MyButtonStyle(color: .black))
-//            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+            //            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             HStack {
                 Button {
                     checkAnswer(userAnswered: 0)
@@ -431,7 +415,7 @@ struct GameFile: View {
                 }.disabled(disalbeAnswerButtonsUntilNextQuestion)
             }
         }
-}
+    }
     private func checkAnswer(userAnswered: Int){
         if testMode == true {
             correctAnswer()
@@ -447,7 +431,7 @@ struct GameFile: View {
         mistakesInLevel += 1
         randomizeWrongSound()
         playSounds(randWrongSound!)
-
+        
     }
     
     private func randomizeOkSound() {
@@ -494,10 +478,10 @@ struct GameFile: View {
                 //check if Bonus level
                 if (currentLevel % 3 == 0) {
                     playSounds(Bonus!)
-//                    startBonusLevel.toggle()
+                    //                    startBonusLevel.toggle()
                     isBonusScreen.toggle()
                 } else {
-                
+                    
                     currentEquation = "Setting Level \(currentLevel+1)"
                     playSounds(NextLevel!)
                 }
@@ -508,9 +492,9 @@ struct GameFile: View {
                 playSounds(RepeatLevel!)
             }
             
-//            announceLevelWinner()
-//            writeLevelFinishTime()
-
+            //            announceLevelWinner()
+            //            writeLevelFinishTime()
+            
             DispatchQueue.main.asyncAfter(deadline: .now()+4, execute: {
                 if advanceToNextLevel == true {
                     currentLevel += 1
@@ -527,32 +511,32 @@ struct GameFile: View {
     }
     
     private func loadUserImagesFromStorage() {
-
+        
     }
     
     private func writeLevelFinishTime(){
-//        guard let uid = FirebaseManager.shared.auth.currentUser?.uid
-//        else {return}
-//        let date = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-//        let dateString = formatter.string(from: date)
-//        print(dateString)
-//        
-//
-//        let userData = ["uid": uid, "LevelFinishTime" : dateString]
-//
-//        FirebaseManager.shared.firestore.collection("Arena")
-//            .document(/*uid*/"game1").updateData(userData) { err in
-//                if let err = err {
-//                    print(err)
-//                    self.dbStatusMessage = "\(err)"
-//                    return
-//                }
-//                print("Success")
-//                
-//
-//            }
+        //        guard let uid = FirebaseManager.shared.auth.currentUser?.uid
+        //        else {return}
+        //        let date = Date()
+        //        let formatter = DateFormatter()
+        //        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        //        let dateString = formatter.string(from: date)
+        //        print(dateString)
+        //
+        //
+        //        let userData = ["uid": uid, "LevelFinishTime" : dateString]
+        //
+        //        FirebaseManager.shared.firestore.collection("Arena")
+        //            .document(/*uid*/"game1").updateData(userData) { err in
+        //                if let err = err {
+        //                    print(err)
+        //                    self.dbStatusMessage = "\(err)"
+        //                    return
+        //                }
+        //                print("Success")
+        //
+        //
+        //            }
     }
 }
 

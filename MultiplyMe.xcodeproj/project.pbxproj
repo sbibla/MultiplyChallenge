@@ -49,6 +49,8 @@
 		64627FE72C0C0AF500CBF657 /* WrongAnswer-4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */; };
 		64627FE92C0D165100CBF657 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 64627FE82C0D165100CBF657 /* index.html */; };
 		64627FEB2C0D479000CBF657 /* iPhoneScreenShot.png in Resources */ = {isa = PBXBuildFile; fileRef = 64627FEA2C0D479000CBF657 /* iPhoneScreenShot.png */; };
+		64627FED2C0EF08B00CBF657 /* geometryImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 64627FEC2C0EF08B00CBF657 /* geometryImage.jpg */; };
+		64627FEF2C0EFBCB00CBF657 /* CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64627FEE2C0EFBCB00CBF657 /* CustomModifiers.swift */; };
 		646CCF1B2B8DB76200CBE526 /* Bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 646CCF1A2B8DB76200CBE526 /* Bonus.wav */; };
 		6474D0402BE35AF00013779E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D03F2BE35AF00013779E /* String+Ext.swift */; };
 		6474D0422BE35BFA0013779E /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6474D0412BE35BFA0013779E /* LoginViewModel.swift */; };
@@ -113,6 +115,8 @@
 		64627FE42C0C0AF400CBF657 /* WrongAnswer-4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "WrongAnswer-4.wav"; sourceTree = "<group>"; };
 		64627FE82C0D165100CBF657 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		64627FEA2C0D479000CBF657 /* iPhoneScreenShot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhoneScreenShot.png; sourceTree = "<group>"; };
+		64627FEC2C0EF08B00CBF657 /* geometryImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = geometryImage.jpg; sourceTree = "<group>"; };
+		64627FEE2C0EFBCB00CBF657 /* CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomModifiers.swift; sourceTree = "<group>"; };
 		646CCF1A2B8DB76200CBE526 /* Bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Bonus.wav; sourceTree = "<group>"; };
 		6474D03F2BE35AF00013779E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		6474D0412BE35BFA0013779E /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -150,13 +154,13 @@
 			children = (
 				647996A42B7EFE6F00B38283 /* GameFile.swift */,
 				647996982B7EEA0500B38283 /* InitScreen.swift */,
+				6474D04E2BE4CDD30013779E /* AppSettingsView.swift */,
 				6457E8E52B840FD8005A1338 /* HeaderView.swift */,
 				6474D0412BE35BFA0013779E /* LoginViewModel.swift */,
 				6457E9102B8690C2005A1338 /* LoginView.swift */,
 				6457E9052B8528C9005A1338 /* BonusView.swift */,
 				6457E9122B86CFCA005A1338 /* GearView.swift */,
 				64560B3C2BC5B946009F56F6 /* ImageInCircle.swift */,
-				6474D04E2BE4CDD30013779E /* AppSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -210,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				6474D0442BE36EE00013779E /* Alert */,
+				64627FEE2C0EFBCB00CBF657 /* CustomModifiers.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -252,6 +257,7 @@
 			children = (
 				6479969A2B7EEA0600B38283 /* Assets.xcassets */,
 				6457E9072B85351C005A1338 /* spaceImage.jpg */,
+				64627FEC2C0EF08B00CBF657 /* geometryImage.jpg */,
 				6457E8DF2B83F17A005A1338 /* launchScreen.jpg */,
 				6457E9032B848B7D005A1338 /* Loading.jpg */,
 				6457E9142B890989005A1338 /* Bigger.jpeg */,
@@ -384,6 +390,7 @@
 				6457E9082B85351C005A1338 /* spaceImage.jpg in Resources */,
 				64627FD62C0BFBA700CBF657 /* CorrectAnswer-3.wav in Resources */,
 				64627FE52C0C0AF500CBF657 /* WrongAnswer-2.wav in Resources */,
+				64627FED2C0EF08B00CBF657 /* geometryImage.jpg in Resources */,
 				64627FD02C0BF92A00CBF657 /* WrongAnswer x 2.wav in Resources */,
 				6479969B2B7EEA0600B38283 /* Assets.xcassets in Resources */,
 				647996C42B817E9700B38283 /* RepeatLevel.aiff in Resources */,
@@ -413,6 +420,7 @@
 				6457E9132B86CFCA005A1338 /* GearView.swift in Sources */,
 				6458225C2BB400A00051D5F8 /* UserDataViewModel.swift in Sources */,
 				6474D0422BE35BFA0013779E /* LoginViewModel.swift in Sources */,
+				64627FEF2C0EFBCB00CBF657 /* CustomModifiers.swift in Sources */,
 				647996A52B7EFE6F00B38283 /* GameFile.swift in Sources */,
 				647996972B7EEA0500B38283 /* MultiplyChallengeApp.swift in Sources */,
 				6457E9062B8528C9005A1338 /* BonusView.swift in Sources */,

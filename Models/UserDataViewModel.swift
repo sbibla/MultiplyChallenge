@@ -30,18 +30,24 @@ final class UserDataViewModel: ObservableObject {
     }
     
     private func loadLastLevel()->Int {
-        let savedHighestLevel = UserDefaults.standard.integer(forKey: "highestLevel")
-        if (savedHighestLevel == 0) {
-            user.highestLevel = 1
-            logManager.shared.logMessage("No recorded level, Running for the first time", .warning)
-            writeUserData(data: 1, Key: "highestLevel")
-            //record first time
-            return -1
-        } else {
-            user.highestLevel = savedHighestLevel
-            logManager.shared.logMessage("Found highest level value: \(user.highestLevel)", .info)
-            return user.highestLevel
-        }
+        //For MVP always starting from level 1
+        user.highestLevel = 1
+        return user.highestLevel
+        //For MVP always starting from level 1
+
+        
+//        let savedHighestLevel = UserDefaults.standard.integer(forKey: "highestLevel")
+//        if (savedHighestLevel == 0) {
+//            user.highestLevel = 1
+//            logManager.shared.logMessage("No recorded level, Running for the first time", .warning)
+//            writeUserData(data: 1, Key: "highestLevel")
+//            //record first time
+//            return -1
+//        } else {
+//            user.highestLevel = savedHighestLevel
+//            logManager.shared.logMessage("Found highest level value: \(user.highestLevel)", .info)
+//            return user.highestLevel
+//        }
     }
     func writeUserLevel(level: Int) {
         writeUserData(data: level, Key: "highestLevel")

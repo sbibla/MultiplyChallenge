@@ -25,6 +25,8 @@ struct GearView: View {
     }
 }
 
+
+
 struct LoadedImagesView: View {
     var selectedImages: [UIImage] = []
     var body: some View {

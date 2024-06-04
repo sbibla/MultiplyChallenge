@@ -36,60 +36,106 @@ struct InitScreen: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                //                SettingsView()
-                HeaderView(PPviewModelHeader: PPviewModel)
-                ImageInCircle(circleImage: tmpImage)
-                    .gesture(tapGesture)
-//#if DEBUG
-                if(showImagePreview) {
-                    LoadedImagesView(selectedImages: PPviewModel.selectedImages)
+        NavigationView{
+            ZStack {
+                if(showImagePreview == false){
+                    Image("geometryImage")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
                 }
-//#endif
-                
-                LoginView()
-                    .opacity(withLoginOption ? 1 : 0)
-                Button {
-                    PPviewModel.appendDefaultImages()
-                    logManager.shared.logMessage("Starting game for user \(emailAddress)", .debug)
-                    startGame.toggle()
+                VStack(spacing:30) {
+                    ImageInCircle(circleImage: tmpImage)
+                        .gesture(tapGesture)
+                    Text("Solve the tile to Unveil")
+                        .font(.system(size: 25))
+                        .foregroundColor(.brandPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom)
+                    Text("One Tile at a Time!")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom)
+                    Spacer()
                     
-                } label: {
-                    Text("Start Game")
-                        .padding()
-                        .background {
-                            Capsule()
-                                .stroke(gradient, lineWidth: 1.5)
-                                .saturation(1.8)
-                        }
-                        .bold()
-                }
-                .fullScreenCover(isPresented: $startGame, content: {
-                    GameFile(localBackgroundImage: PPviewModel.selectedImages, currentLevel: userModel.user.highestLevel, highScore: userModel.user.highScore)
-                    
-                })
-                if withLoginOption == true {
-                    
-                    Button {
-                        //Do Something for testing button
-                        showSettings.toggle()
-                    }label: {
-                        Text("🕺🏻New here? \n Create An Account")
-                            .font(.system(size: 15))
-                            .foregroundColor(Color(UIColor.systemBlue))
+                    //#if DEBUG
+                    if(showImagePreview) {
+                        LoadedImagesView(selectedImages: PPviewModel.selectedImages)
                     }
-                    .fullScreenCover(isPresented: $showSettings, content: {
-                        AppSettingsView()
+                    //#endif
+                    
+                    //                LoginView()
+                    //                    .opacity(withLoginOption ? 1 : 0)
+                    Button {
+                        PPviewModel.appendDefaultImages()
+                        logManager.shared.logMessage("Starting game for user \(emailAddress)", .debug)
+                        startGame.toggle()
+                        
+                    } label: {
+                        Text("Start Game")
+                            .padding()
+                            .background {
+                                Capsule()
+                                    .stroke(gradient, lineWidth: 3.5)
+                                    .saturation(1.8)
+                            }
+                            .font(.system(size: 30))
+                            .foregroundColor(Color.white)
+//                            .bold()
+                    }
+                    .fullScreenCover(isPresented: $startGame, content: {
+                        GameFile(localBackgroundImage: PPviewModel.selectedImages, displayStartGameButton: false, currentLevel: userModel.user.highestLevel, highScore: userModel.user.highScore)                    
                     })
+                    if withLoginOption == true {
+                        
+                        Button {
+                            //Do Something for testing button
+                            showSettings.toggle()
+                        }label: {
+                            Text("🕺🏻New here? \n Create An Account")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color(UIColor.systemBlue))
+                        }
+                        .fullScreenCover(isPresented: $showSettings, content: {
+                            AppSettingsView()
+                        })
+                    }
+                }//.background(Color(UIColor.black)) //VStack
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        PhotosPicker(selection: $PPviewModel.imageSelections,maxSelectionCount: 50, matching: .any(of: [.images, .screenshots, .panoramas, .bursts, .livePhotos])) {
+                            Image(systemName: "plus")
+                            //                            .foregroundColor(Color(.white))
+                                .imageScale(.large)
+                                .frame(width: 64, height: 64)
+                                .modifier(StandardButtonStyle())
+                        }                        
+                    }
+//                    ToolbarItem(placement: .navigationBarLeading) {
+//                        Button {
+//                            AppSettingsView()
+//                        } label: {
+//                            Image(systemName: "gear")
+//                                .modifier(StandardButtonStyle())
+//                        }
+//                    }
+                    
                 }
-            }//.background(Color(UIColor.black)) //VStack
-            
-        }.environmentObject(UserDataViewModel())
-    }    
+            }
+        }
+        .environmentObject(UserDataViewModel())
+    }
 }
 
 #Preview {
     InitScreen()
     //    InitScreen( mySoundPtr: InitScreen.Sounds(CorrectAnswer: nil, NextLevel: nil, WrongAnswer: nil))
 }
+
+struct SettingsGear: View {
+    var body: some View {
+        Spacer()
+    }
+}
+

@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ImageInCircle: View {
     var circleImage: UIImage
-    
+    let sizeOfCicle = 250.0
     var body: some View {
         Image(uiImage: circleImage)
         .resizable()
-        .frame(width: 120 , height: 120)
+        .frame(width: sizeOfCicle , height: sizeOfCicle)
         .aspectRatio(contentMode: .fit)
         .clipShape(Circle())
         .overlay {
