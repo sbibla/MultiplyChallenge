@@ -334,7 +334,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyMe" */;
+			buildConfigurationList = 6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "AdditionChallenge" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -561,13 +561,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MultiplyChallenge/Preview Content\"";
 				DEVELOPMENT_TEAM = FN7XQ5XQEY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MultiplyMe-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = MultiplyMe;
+				INFOPLIST_KEY_CFBundleDisplayName = AddMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.educational-games";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To choose background images the app needs access to photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -581,7 +581,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = saar.bibla.MultiplyChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -601,13 +601,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MultiplyChallenge/Preview Content\"";
 				DEVELOPMENT_TEAM = FN7XQ5XQEY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MultiplyMe-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = MultiplyMe;
+				INFOPLIST_KEY_CFBundleDisplayName = AddMe;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.educational-games";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To choose background images the app needs access to photos";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -621,7 +621,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = saar.bibla.MultiplyChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -637,7 +637,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "MultiplyMe" */ = {
+		6479968E2B7EEA0500B38283 /* Build configuration list for PBXProject "AdditionChallenge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6479969F2B7EEA0600B38283 /* Debug */,

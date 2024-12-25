@@ -258,7 +258,9 @@ struct GameFile: View {
         
         //        building dictionary until reaches 16 questions. Looping to remove duplicate keys
         while pmathDictionary.count < 16 {
-            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
+//            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
+            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateAdditionEquation(10)
+
             logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
             
             if (pmathDictionary.updateValue((resultOne, resultTwo, resultThree, resultLocation), forKey: equation) != nil) {
