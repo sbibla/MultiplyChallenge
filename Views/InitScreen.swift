@@ -69,7 +69,7 @@ struct InitScreen: View {
                     //                LoginView()
                     //                    .opacity(withLoginOption ? 1 : 0)
                     Button {
-                        PPviewModel.appendDefaultImages()
+                        PPviewModel.appendDefaultImages(isPokemonMode: true)
                         logManager.shared.logMessage("Starting game for user \(emailAddress)", .debug)
                         startGame.toggle()
                         

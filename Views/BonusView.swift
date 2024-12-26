@@ -74,7 +74,7 @@ struct BonusView: View {
                                     Text("\(literal1)")
                                         .font(.system(size: 40))
                                     
-                                    Text("x \(literal2)")
+                                    Text("+ \(literal2)")
                                         .font(.system(size: 40))
                                         .underline()
                           
@@ -91,13 +91,19 @@ struct BonusView: View {
                                 }
                             }.disabled(isGameOver)
                         }
-
-                        Text(answerLabel ?? "Touch the\nBigger")
-                            .foregroundColor(.red)
-                            .multilineTextAlignment(.center)
-                            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-                            .font(.system(size: 25))
-                        
+                        if !isGameOver {
+                            Text(answerLabel ?? "Touch the\nBigger")
+                                .foregroundColor(.red)
+                                .multilineTextAlignment(.center)
+                                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                                .font(.system(size: 25))
+                        } else {
+                            Text(answerLabel ?? "Game Over!")
+                                .foregroundColor(.red)
+                                .multilineTextAlignment(.center)
+                                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
+                                .font(.system(size: 25))
+                        }
                         HStack {
                             Button(){
                                 checkAnswer(number: 2)
@@ -108,7 +114,7 @@ struct BonusView: View {
                                         .multilineTextAlignment(.trailing)
                                         .font(.system(size: 40 ))
                                     
-                                    Text("x \(literal4)")
+                                    Text("+ \(literal4)")
                                         .multilineTextAlignment(.trailing)
                                         .font(.system(size: 40))
                                     //                            .offset(y: -5)
@@ -127,15 +133,18 @@ struct BonusView: View {
                     }.foregroundColor(.white)
                 Spacer()
                 HStack {
-                    Text("Score: \(score)")
-                        .font(.system(size: 20))
-                    Text("Time: \(Int(timeRemaining))")
-                        .font(.system(size: 20))
+                    if !isGameOver {
+                        Text("Score: \(score)")
+                            .font(.system(size: 20))
+                        Text("Time: \(Int(timeRemaining))")
+                            .font(.system(size: 20))
+                    }
                 }.foregroundColor(.red)
                 if isGameOver {
-                    Text("Game Over! Score: \(score)")
-                        .font(.title)
-                    Text("Highest Score \(highScore)")
+                    Text("Your Score: \(score)")
+                        .font(.largeTitle).foregroundColor(.red)
+                    Text("Highest Score \(highScore)").foregroundColor(.white)
+
                     Spacer()
                     Button() {
                         isPresented.toggle()
@@ -194,7 +203,7 @@ struct BonusView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity,maxHeight: .infinity)
                             .background(.black)
-                        Text("You have 1 minute to hit the largest multiplication answer")
+                        Text("You have 1 minute to hit the largest Addition answer")
                             .font(.system(size: 25))
                             .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                             .padding(.bottom)
@@ -211,11 +220,11 @@ struct BonusView: View {
     func generateEquations() {
         // Generate random equations with difficulty levels
         repeat {
-            literal1 = Int.random(in:1 ... 12)
+            literal1 = Int.random(in:1 ... 9)
             literal2 = Int.random(in:1 ... 12)
-            literal3 = Int.random(in:1 ... 12)
+            literal3 = Int.random(in:1 ... 9)
             literal4 = Int.random(in:1 ... 12)
-        } while literal1*literal2 == literal3*literal4
+        } while literal1+literal2 == literal3+literal4
 
         answer = literal1*literal2 > literal3*literal4 ? 1 : 2
     }

@@ -62,10 +62,17 @@ final class PhotoPickerViewModal: ObservableObject {
                 imageSelections.removeAll(keepingCapacity: true)
     }
     
-    func appendDefaultImages(){
-        for index in 1...13 {
-            selectedImages.append(UIImage(named: "DefaultImage\(index).jpg")!)
+    func appendDefaultImages(isPokemonMode: Bool = false){
+        if isPokemonMode {
+            for index in 1...10 {
+                selectedImages.append(UIImage(named: "PokemonImage\(index).jpg")!)
+            }
+        }else {
+            for index in 1...13 {
+                selectedImages.append(UIImage(named: "DefaultImage\(index).jpg")!)
+            }
         }
+    
     }
     func loadImagesFromLocalStorage(folderName: String = "UserImageFolder") -> Int{
         //Load images until reaches a non-existing file.

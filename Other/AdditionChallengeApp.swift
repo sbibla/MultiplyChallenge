@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct MultiplyChallengeApp: App {
+struct AdditionChallengeApp: App {
     init() {
         UIView.appearance().isMultipleTouchEnabled = false
             UIView.appearance().isExclusiveTouch = true
