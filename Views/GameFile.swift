@@ -62,13 +62,15 @@ struct GameFile: View {
     @State var gameBackgroundImagesDictionary: [Int: UIImage] = [:]
     @State var shouldShowImagePicker = false
     @State var currentLevel = 1
-    @State var disalbeAnswerButtonsUntilNextQuestion = false
+    @State var bonusVideoID = "K4TOrB7at0Y"
+    @State var disableAnswerButtonsUntilNextQuestion = false
     @State private var hasTimeElapsed = false
-    @State private var testMode = false
+    @State private var testMode = true
     @State var advanceToNextLevel = false
     @State private var allTilesDisabled = false
     @State private var isBonusScreen = false
-    @State var startBonusLevel = false
+    @State private var isBonusVideoOn = false
+//    @State var startBonusLevel = false
     @State var highScore: Int
     @State var randOkSound: URL? = nil
     @State var randWrongSound: URL? = nil
@@ -97,7 +99,7 @@ struct GameFile: View {
     
     let encouragementTextArray = ["🙏🏼 Believe 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
     //    @EnvironmentObject var userData: UserData
-    
+    let pokemonVideoArray = ["SuV3bEYQWeg","E-A_pn1_pCw","AG4GSlMhGHs", "xM24hiwTAe8", "EKwbZQXNWsk"]
     var body: some View {
         ZStack {
             BackgroundPuzzleImage
@@ -119,6 +121,9 @@ struct GameFile: View {
             .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
             .fullScreenCover(isPresented: $isBonusScreen, content: {
                 BonusView(isPresented: $isBonusScreen, highScore: $highScore)
+            })
+            .fullScreenCover(isPresented: $isBonusVideoOn, content: {
+                YoutubePlayerView(isPresented: $isBonusVideoOn, bonVideoId: bonusVideoID)
             })
             
         }
@@ -257,7 +262,7 @@ struct GameFile: View {
         logManager.shared.logMessage("Starting new game, pmathSize:\(pmathDictionary.count)", .debug)
         
         //        building dictionary until reaches 16 questions. Looping to remove duplicate keys
-        while pmathDictionary.count < 16 {
+        while pmathDictionary.count < 12 {
 //            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
             (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateAdditionEquation(10)
 
@@ -267,6 +272,20 @@ struct GameFile: View {
                 logManager.shared.logMessage("value \(equation) already exists", .debug)
             }
         }
+        
+        while pmathDictionary.count < 16 {
+//            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
+            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateSubstructionEquation(1)
+            
+
+            logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
+            
+            if (pmathDictionary.updateValue((resultOne, resultTwo, resultThree, resultLocation), forKey: equation) != nil) {
+                logManager.shared.logMessage("value \(equation) already exists", .debug)
+            }
+        }
+        
+        
         logManager.shared.logMessage("Dictionary built with size \(pmathDictionary.count)", .debug )
         initLevelButtons()
         advanceToNextLevel = false
@@ -315,7 +334,7 @@ struct GameFile: View {
         currentEquationAnswers[0] = String(pmathDictionary[currentEquation]?.0 ?? -1)
         currentEquationAnswers[1] = String(pmathDictionary[currentEquation]?.1 ?? -1)
         currentEquationAnswers[2] = String(pmathDictionary[currentEquation]?.2 ?? -1)
-        disalbeAnswerButtonsUntilNextQuestion = false
+        disableAnswerButtonsUntilNextQuestion = false
     }
     private var startGameButton: some View {
         HStack(spacing: 16) {
@@ -340,7 +359,7 @@ struct GameFile: View {
             } label: {
                 HStack {
                     Spacer()
-                    Text(disalbeAnswerButtonsUntilNextQuestion ? encouragementTextArray[Int.random(in:0 ... encouragementTextArray.count-1)] : currentEquation)
+                    Text(disableAnswerButtonsUntilNextQuestion ? encouragementTextArray[Int.random(in:0 ... encouragementTextArray.count-1)] : currentEquation)
                         .font(.system(size: 26, weight: .bold))
                     Spacer()
                 }
@@ -369,7 +388,7 @@ struct GameFile: View {
                 } label: {
                     HStack {
                         Spacer()
-                        Text(disalbeAnswerButtonsUntilNextQuestion ? "👍🏼" : self.currentEquationAnswers[0])
+                        Text(disableAnswerButtonsUntilNextQuestion ? "👍🏼" : self.currentEquationAnswers[0])
                             .font(.system(size: 16, weight: .bold))
                         Spacer()
                     }
@@ -380,13 +399,13 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
+                }.disabled(disableAnswerButtonsUntilNextQuestion)
                 Button {
                     checkAnswer(userAnswered: 1)
                 } label: {
                     HStack {
                         Spacer()
-                        Text(disalbeAnswerButtonsUntilNextQuestion ? "👍🏼" : currentEquationAnswers[1])
+                        Text(disableAnswerButtonsUntilNextQuestion ? "👍🏼" : currentEquationAnswers[1])
                             .font(.system(size: 16, weight: .bold))
                         Spacer()
                     }
@@ -397,13 +416,13 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
+                }.disabled(disableAnswerButtonsUntilNextQuestion)
                 Button {
                     checkAnswer(userAnswered: 2)
                 } label: {
                     HStack {
                         Spacer()
-                        Text(disalbeAnswerButtonsUntilNextQuestion ? "👍🏼" : currentEquationAnswers[2])
+                        Text(disableAnswerButtonsUntilNextQuestion ? "👍🏼" : currentEquationAnswers[2])
                             .font(.system(size: 16, weight: .bold))
                         Spacer()
                     }
@@ -414,7 +433,7 @@ struct GameFile: View {
                     
                     .padding(.horizontal)
                     .shadow(radius: 15)
-                }.disabled(disalbeAnswerButtonsUntilNextQuestion)
+                }.disabled(disableAnswerButtonsUntilNextQuestion)
             }
         }
     }
@@ -468,20 +487,24 @@ struct GameFile: View {
         playSounds(randOkSound!)
         showImage[currentButton].toggle()
         disableButton[currentButton].toggle()
-        disalbeAnswerButtonsUntilNextQuestion.toggle()
+        disableAnswerButtonsUntilNextQuestion.toggle()
         
         //All answers are correct
         if disableButton.allSatisfy({$0}) {
             levelComplete = true
             logManager.shared.logMessage("Level completed with \(mistakesInLevel) mistakes",.debug)
-            disalbeAnswerButtonsUntilNextQuestion = false
-            if mistakesInLevel < 5 {
+            disableAnswerButtonsUntilNextQuestion = false
+            if mistakesInLevel < 6 {
                 advanceToNextLevel = true
                 //check if Bonus level
-                if (currentLevel % 3 == 0) {
+                if (currentLevel % 5 == 0) {
                     playSounds(Bonus!)
                     //                    startBonusLevel.toggle()
-                    isBonusScreen.toggle()
+                    DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
+                        //                        isBonusScreen.toggle()
+                        isBonusVideoOn.toggle()
+                    })
+                    
                 } else {
                     
                     currentEquation = "Setting Level \(currentLevel+1)"
@@ -497,8 +520,16 @@ struct GameFile: View {
             //            announceLevelWinner()
             //            writeLevelFinishTime()
             
-            DispatchQueue.main.asyncAfter(deadline: .now()+4, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
                 if advanceToNextLevel == true {
+                    switch currentLevel {
+                    case 5: bonusVideoID = pokemonVideoArray[0]
+                    case 10: bonusVideoID = pokemonVideoArray[1]
+                    case 15: bonusVideoID = pokemonVideoArray[2]
+                    case 20: bonusVideoID = pokemonVideoArray[3]
+                    case 25: bonusVideoID = pokemonVideoArray[3]
+                    default: bonusVideoID = "3RBnvv_82R0" //Sunset
+                    }
                     currentLevel += 1
                     userData.writeUserLevel(level: currentLevel)
                 }

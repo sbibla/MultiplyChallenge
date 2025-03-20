@@ -220,10 +220,10 @@ struct BonusView: View {
     func generateEquations() {
         // Generate random equations with difficulty levels
         repeat {
-            literal1 = Int.random(in:1 ... 9)
-            literal2 = Int.random(in:1 ... 12)
-            literal3 = Int.random(in:1 ... 9)
-            literal4 = Int.random(in:1 ... 12)
+            literal1 = Int.random(in:1 ... 5)
+            literal2 = Int.random(in:1 ... 6)
+            literal3 = Int.random(in:1 ... 5)
+            literal4 = Int.random(in:1 ... 6)
         } while literal1+literal2 == literal3+literal4
 
         answer = literal1*literal2 > literal3*literal4 ? 1 : 2

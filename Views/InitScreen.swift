@@ -21,7 +21,7 @@ struct InitScreen: View {
     @State var soundOn = true
     @State var tmpImage = UIImage(named: "Loading.jpg")!
     //Setting to true for MVP until setting screen is ready
-    @State var showImagePreview = true
+    @State var showImagePreview = false
     @State private var showSettings = false
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
