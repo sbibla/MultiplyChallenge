@@ -64,7 +64,7 @@ final class PhotoPickerViewModal: ObservableObject {
     
     func appendDefaultImages(isPokemonMode: Bool = false){
         if isPokemonMode {
-            for index in 1...10 {
+            for index in 1...13 {
                 selectedImages.append(UIImage(named: "PokemonImage\(index).jpg")!)
             }
         }else {

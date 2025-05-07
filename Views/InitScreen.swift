@@ -23,6 +23,8 @@ struct InitScreen: View {
     //Setting to true for MVP until setting screen is ready
     @State var showImagePreview = false
     @State private var showSettings = false
+    @State private var showLevelSelection = false
+    @State private var selectedLevel = 1
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
                                   endPoint: .bottomTrailing)
@@ -58,6 +60,10 @@ struct InitScreen: View {
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
                         .padding(.bottom)
+                        .onTapGesture(count: 3) {
+                            userModel.writeUserLevel(level: 1)
+                            logManager.shared.logMessage("Reset highest level to 1", .info)
+                        }
                     Spacer()
                     
                     //#if DEBUG
@@ -69,10 +75,9 @@ struct InitScreen: View {
                     //                LoginView()
                     //                    .opacity(withLoginOption ? 1 : 0)
                     Button {
-                        PPviewModel.appendDefaultImages(isPokemonMode: true)
+                        PPviewModel.appendDefaultImages(isPokemonMode: true) //Loading pokemon images
                         logManager.shared.logMessage("Starting game for user \(emailAddress)", .debug)
-                        startGame.toggle()
-                        
+                        showLevelSelection.toggle()
                     } label: {
                         Text("Start Game")
                             .padding()
@@ -85,9 +90,24 @@ struct InitScreen: View {
                             .foregroundColor(Color.white)
 //                            .bold()
                     }
-                    .fullScreenCover(isPresented: $startGame, content: {
-                        GameFile(localBackgroundImage: PPviewModel.selectedImages, displayStartGameButton: false, currentLevel: userModel.user.highestLevel, highScore: userModel.user.highScore)                    
-                    })
+                    .fullScreenCover(isPresented: $startGame) {
+                        GameFile(localBackgroundImage: PPviewModel.selectedImages, 
+                               displayStartGameButton: false, 
+                               currentLevel: userModel.user.currentLevel, 
+                               highScore: userModel.user.highScore)
+                            .environmentObject(userModel)
+                    }
+                    .sheet(isPresented: $showLevelSelection) {
+                        LevelSelectionView(selectedLevel: $selectedLevel, isPresented: $showLevelSelection)
+                            .environmentObject(userModel)
+                            .onDisappear {
+                                if selectedLevel > 0 {
+                                    logManager.shared.logMessage("User selected level: \(selectedLevel)", .info)
+                                    userModel.user.currentLevel = selectedLevel
+                                    startGame = true
+                                }
+                            }
+                    }
                     if withLoginOption == true {
                         
                         Button {

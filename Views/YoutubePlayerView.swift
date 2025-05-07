@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WebKit
+import UIKit
 
 struct YouTubePlayerViewer: UIViewRepresentable {
     let videoID: String
@@ -15,23 +16,21 @@ struct YouTubePlayerViewer: UIViewRepresentable {
     @Binding var isPresented: Bool
     
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.configuration.allowsInlineMediaPlayback = false
-        webView.configuration.mediaTypesRequiringUserActionForPlayback = []
+        let configuration = WKWebViewConfiguration()
+        configuration.allowsInlineMediaPlayback = true
+        configuration.mediaTypesRequiringUserActionForPlayback = []
         
+        let webView = WKWebView(frame: .zero, configuration: configuration)
         return webView
     }
+    
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        //        guard let url = URL(string: "https://www.youtube.com/embed/\(videoID)?playsinline=1") else {
-        
-        guard let url = URL(string: "https://www.youtube.com/embed/\(videoID)?playsinline=0?controls=0?autoplay=1") else {
-            
+        guard let url = URL(string: "https://www.youtube.com/embed/\(videoID)?playsinline=1&controls=1&autoplay=1&enablejsapi=1") else {
             return
-            
         }
         let request = URLRequest(url: url)
         uiView.load(request)
-//Max video 5min
+        //Max video 5min
         DispatchQueue.main.asyncAfter(deadline: .now()+300, execute: {
             isPresented.toggle()
         })

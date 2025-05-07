@@ -12,4 +12,5 @@ struct User: Codable {
     var alias           = ""
     var highScore       = 0
     var highestLevel    = 1
+    var currentLevel    = 1
 }

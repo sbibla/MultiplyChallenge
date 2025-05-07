@@ -17,20 +17,19 @@ import AVFoundation
 
 struct GameFile: View {
     @State var localBackgroundImage: [UIImage]
-    //    init(img: [UIImage]) {
-    //        for myImg in img {
-    //            self.localBackgroundImage.append(myImg)
-    //        }
-    //        startGame()
-    //    }
-    //    init(localBackgroundImage: [UIImage?] = [nil]){
-    //        _localBackgroundImage = State(initialValue: localBackgroundImage)
-    //        _puzzlePickedImage =  State(initialValue: puzzlePickedImage)
-    //    }
-    
     @State var audioPlayer: AVAudioPlayer!
     @State var soundsMuted = false
+    @State var displayStartGameButton: Bool
+    @State var currentLevel: Int
+    @State var highScore: Int
     
+    init(localBackgroundImage: [UIImage], displayStartGameButton: Bool, currentLevel: Int, highScore: Int) {
+        self._localBackgroundImage = State(initialValue: localBackgroundImage)
+        self._displayStartGameButton = State(initialValue: displayStartGameButton)
+        self._currentLevel = State(initialValue: currentLevel)
+        self._highScore = State(initialValue: highScore)
+        logManager.shared.logMessage("GameFile initialized with level: \(currentLevel)", .info)
+    }
     
     @State private var showImage = [false, false, false, false,
                                     false, false, false, false,
@@ -51,7 +50,6 @@ struct GameFile: View {
     
     @State private var pmathDictionary: [String: (Int, Int, Int, Int)] = [:]
     @State var currentEquation = "Level 1"
-    @State var displayStartGameButton = true
     @State var currentEquationAnswers = ["Ans1", "Ans2", "Ans3"]
     @State var currentButton = 0
     @State var levelComplete = false
@@ -61,17 +59,15 @@ struct GameFile: View {
     @State private var puzzlePickedImage: UIImage?
     @State var gameBackgroundImagesDictionary: [Int: UIImage] = [:]
     @State var shouldShowImagePicker = false
-    @State var currentLevel = 1
     @State var bonusVideoID = "K4TOrB7at0Y"
     @State var disableAnswerButtonsUntilNextQuestion = false
     @State private var hasTimeElapsed = false
-    @State private var testMode = true
+    @State private var testMode = false
     @State var advanceToNextLevel = false
     @State private var allTilesDisabled = false
     @State private var isBonusScreen = false
     @State private var isBonusVideoOn = false
 //    @State var startBonusLevel = false
-    @State var highScore: Int
     @State var randOkSound: URL? = nil
     @State var randWrongSound: URL? = nil
     @State var CorrectAnswer1: URL? = nil
@@ -100,6 +96,7 @@ struct GameFile: View {
     let encouragementTextArray = ["🙏🏼 Believe 👋🏼","Good Job 💪🏼","Bravo 👋🏼", "Excellent 🌈", "Perfecto ⚡️", "Respect!! 😎", "Nice 💯", "Good On'ya 💪🏼", "That is right! 🍭", "Bullseye 🎯", "Ready for more ❔", "Correct Answer 👍🏽", "🎉 Amazing 🎉", "Keep Pushing 🫸🏼", "👩‍👦‍👦🤞👨", "🧑👈🙏💪", "😔👈🏋🥇", "Very good🕺🏻"]
     //    @EnvironmentObject var userData: UserData
     let pokemonVideoArray = ["SuV3bEYQWeg","E-A_pn1_pCw","AG4GSlMhGHs", "xM24hiwTAe8", "EKwbZQXNWsk"]
+    
     var body: some View {
         ZStack {
             BackgroundPuzzleImage
@@ -118,7 +115,7 @@ struct GameFile: View {
             .overlay(
                 showAnswerButtons, alignment: .bottom)
             .navigationBarHidden(true)
-            .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
+//            .overlay(displayStartGameButton ? startGameButton : nil, alignment: .center )
             .fullScreenCover(isPresented: $isBonusScreen, content: {
                 BonusView(isPresented: $isBonusScreen, highScore: $highScore)
             })
@@ -128,6 +125,7 @@ struct GameFile: View {
             
         }
         .onAppear{
+            logManager.shared.logMessage("GameFile appeared with level: \(currentLevel)", .info)
             startGame()
         }
     }
@@ -264,7 +262,7 @@ struct GameFile: View {
         //        building dictionary until reaches 16 questions. Looping to remove duplicate keys
         while pmathDictionary.count < 12 {
 //            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
-            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateAdditionEquation(10)
+            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateAdditionEquation(level)
 
             logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
             
@@ -275,7 +273,7 @@ struct GameFile: View {
         
         while pmathDictionary.count < 16 {
 //            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateMultiplicationEquation(10)
-            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateSubstructionEquation(1)
+            (equation, resultOne, resultTwo, resultThree, resultLocation) = MathQuestionBuilder.shared.generateSubstructionEquation(level)
             
 
             logManager.shared.logMessage("Inserting to pmath:\(equation), \(resultOne), \(resultTwo), \(resultThree), \(resultLocation)", .debug)
@@ -299,6 +297,7 @@ struct GameFile: View {
     private func startGame(){
         displayStartGameButton = false
         levelComplete = false
+        currentEquation = "Level \(currentLevel)"
         buildLevel(level: currentLevel)
         populateQuestions()
         if soundsInitialized == false {
@@ -310,7 +309,7 @@ struct GameFile: View {
         for eq in pmathDictionary {
             logManager.shared.logMessage("Equation \(eq.key) answers: \(eq.value) correct: \(eq.value.3)", .debug)
         }
-        logManager.shared.logMessage("Starting game with \(pmathDictionary.count) questions in each level \n Current level \(currentLevel   )", .info)
+        logManager.shared.logMessage("Starting game with \(pmathDictionary.count) questions in each level \n Current level \(currentLevel)", .info)
     }
     
     private func populateQuestions(){
@@ -372,14 +371,16 @@ struct GameFile: View {
                 
             }
             .simultaneousGesture(TapGesture(count: 3).onEnded {
-                if(testMode) {
-                    currentLevel += 1
-                    
-                    logManager.shared.logMessage("NextLevel pressed", .debug)
-                }else {
-                    presentationMode.wrappedValue.dismiss()
-                }
+                //                if(testMode) {
+                //                    currentLevel += 1
+                //
+                //                    logManager.shared.logMessage("NextLevel pressed", .debug)
+                //                }else {
+                //                    presentationMode.wrappedValue.dismiss()
+                //                }
+                currentLevel += 1
             })
+            
             .buttonStyle(MyButtonStyle(color: .black))
             //            .disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
             HStack {
@@ -499,26 +500,21 @@ struct GameFile: View {
                 //check if Bonus level
                 if (currentLevel % 5 == 0) {
                     playSounds(Bonus!)
-                    //                    startBonusLevel.toggle()
                     DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
-                        //                        isBonusScreen.toggle()
                         isBonusVideoOn.toggle()
                     })
-                    
                 } else {
-                    
                     currentEquation = "Setting Level \(currentLevel+1)"
+                    //save current level
+                    userData.writeUserLevel(level: currentLevel)
                     playSounds(NextLevel!)
                 }
-            }else {
+            } else {
                 advanceToNextLevel = false
                 logManager.shared.logMessage("Too many mistakes (\(mistakesInLevel)), repeat level", .debug)
                 currentEquation = "Repeat Level \(currentLevel)"
                 playSounds(RepeatLevel!)
             }
-            
-            //            announceLevelWinner()
-            //            writeLevelFinishTime()
             
             DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
                 if advanceToNextLevel == true {
@@ -534,10 +530,9 @@ struct GameFile: View {
                     userData.writeUserLevel(level: currentLevel)
                 }
                 currentEquation = "Choose an equation"
-                startGame()})
+                startGame()
+            })
         }
-        
-        
     }
     private func announceLevelWinner() {
         
@@ -574,5 +569,5 @@ struct GameFile: View {
 }
 
 #Preview {
-    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg")!, UIImage(named: "Loading.jpg")!], highScore: 0)
+    GameFile(localBackgroundImage: [UIImage(named: "DefaultImage10.jpg")!, UIImage(named: "Loading.jpg")!], displayStartGameButton: true, currentLevel: 1, highScore: 0)
 }
