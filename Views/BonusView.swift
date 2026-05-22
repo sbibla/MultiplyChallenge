@@ -226,7 +226,7 @@ struct BonusView: View {
             literal4 = Int.random(in:1 ... 12)
         } while literal1+literal2 == literal3+literal4
 
-        answer = literal1*literal2 > literal3*literal4 ? 1 : 2
+        answer = literal1+literal2 > literal3+literal4 ? 1 : 2
     }
     
     func playSounds(_ soundFileName : String) {

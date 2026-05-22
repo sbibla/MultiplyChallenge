@@ -55,7 +55,7 @@ struct InitScreen: View {
                         .padding(.bottom)
                     Text("One Tile at a Time!")
                         .font(.system(size: 25))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color.primary)
                         .multilineTextAlignment(.center)
                         .padding(.bottom)
                     Spacer()
@@ -82,7 +82,7 @@ struct InitScreen: View {
                                     .saturation(1.8)
                             }
                             .font(.system(size: 30))
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color.primary)
 //                            .bold()
                     }
                     .fullScreenCover(isPresented: $startGame, content: {
