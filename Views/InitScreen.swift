@@ -23,18 +23,14 @@ struct InitScreen: View {
     //Setting to true for MVP until setting screen is ready
     @State var showImagePreview = true
     @State private var showSettings = false
+    @State private var showDevMenu = false
+    @State private var devTestMode = false
+    @State private var devSoundsMuted = false
     let gradient = LinearGradient(colors: [.red, .green],
                                   startPoint: .topLeading,
                                   endPoint: .bottomTrailing)
     @StateObject private var PPviewModel = PhotoPickerViewModal()
     @StateObject private var userModel = UserDataViewModel()
-    
-    var tapGesture: some Gesture {
-        TapGesture(count: 3)
-            .onEnded {
-                showImagePreview.toggle()
-            }
-    }
     
     var body: some View {
         NavigationView{
@@ -47,7 +43,9 @@ struct InitScreen: View {
                 }
                 VStack(spacing:30) {
                     ImageInCircle(circleImage: tmpImage)
-                        .gesture(tapGesture)
+                        .onLongPressGesture(minimumDuration: 5) {
+                            showDevMenu = true
+                        }
                     Text("Solve the tile to Unveil")
                         .font(.system(size: 25))
                         .foregroundColor(.brandPrimary)
@@ -86,7 +84,7 @@ struct InitScreen: View {
 //                            .bold()
                     }
                     .fullScreenCover(isPresented: $startGame, content: {
-                        GameFile(localBackgroundImage: PPviewModel.selectedImages, displayStartGameButton: false, currentLevel: userModel.user.highestLevel, highScore: userModel.user.highScore)                    
+                        GameFile(localBackgroundImage: PPviewModel.selectedImages, soundsMuted: devSoundsMuted, displayStartGameButton: false, currentLevel: userModel.user.highestLevel, testMode: devTestMode, highScore: userModel.user.highScore)
                     })
                     if withLoginOption == true {
                         
@@ -113,19 +111,32 @@ struct InitScreen: View {
                                 .modifier(StandardButtonStyle())
                         }                        
                     }
-//                    ToolbarItem(placement: .navigationBarLeading) {
-//                        Button {
-//                            AppSettingsView()
-//                        } label: {
-//                            Image(systemName: "gear")
-//                                .modifier(StandardButtonStyle())
-//                        }
-//                    }
-                    
                 }
             }
         }
         .environmentObject(UserDataViewModel())
+        .sheet(isPresented: $showDevMenu) {
+            NavigationView {
+                Form {
+                    Section(header: Text("Game")) {
+                        Toggle("All Answers Correct", isOn: $devTestMode)
+                    }
+                    Section(header: Text("Display")) {
+                        Toggle("Show Image Preview", isOn: $showImagePreview)
+                    }
+                    Section(header: Text("Audio")) {
+                        Toggle("Mute Sounds", isOn: $devSoundsMuted)
+                    }
+                }
+                .navigationTitle("Developer Menu")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") { showDevMenu = false }
+                    }
+                }
+            }
+        }
     }
 }
 

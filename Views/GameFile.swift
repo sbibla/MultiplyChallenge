@@ -64,7 +64,7 @@ struct GameFile: View {
     @State var currentLevel = 1
     @State var disalbeAnswerButtonsUntilNextQuestion = false
     @State private var hasTimeElapsed = false
-    @State private var testMode = false
+    @State var testMode = false
     @State var advanceToNextLevel = false
     @State private var allTilesDisabled = false
     @State private var isBonusScreen = false
